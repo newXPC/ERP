@@ -1,22 +1,98 @@
+\providecommand{\myLang}{de}
+\providecommand{\myStandort}{Bonn}
+\providecommand{\myStudienarbeit}{Projektarbeit}
+\providecommand{\myStudiengang}{Wirtschaftsinformatik}
+\providecommand{\myGrad}{Bachelor of Science (B.Sc.)}
+\providecommand{\myTitel}{Analyse von Prozessineffizienzen durch Process Mining in ERP-Systemen: Eine Untersuchung der Datenstrukturen und Algorithmen am Beispiel des Order-to-Cash-Prozesses}
+\providecommand{\myAutor}{Tom Potthoff und Sienna Desirée Muhedin Rosero}
+\providecommand{\myBetreuer}{Dipl.-Ing. Sandro Coletta}
+\providecommand{\myMatrikelnummer}{736988, 728087}
+\providecommand{\myDatum}{19. Juli 2026}
+\providecommand{\myModul}{ERP-Systeme}
+
+\newcommand{\langde}[1]{\ifnum\pdfstrcmp{\myLang}{de}=0 #1\fi}
+\newcommand{\langen}[1]{\ifnum\pdfstrcmp{\myLang}{en}=0 #1\fi}
+
+\newcommand{\ifThesis}[2]{%
+  \ifdefstring{\myStudienarbeit}{Bachelor-Thesis}{#1}{%
+  \ifdefstring{\myStudienarbeit}{Master-Thesis}{#1}{#2}}%
+}
+
+\newcommand{\myBetreuerLabel}{%
+  \ifThesis{%
+    \langde{Erstgutachter}\langen{First Reviewer}%
+  }{%
+    \langde{Betreuer}\langen{Advisor}%
+  }%
+}
+
 \begin{titlepage}
-\centering
-{\large FOM Hochschule für Oekonomie \& Management\par}
-{\large Hochschulzentrum \standort\par}
-\vspace{2.5cm}
-{\large Projektarbeit\par}
-{\large im Modul \glqq ERP-Systeme\grqq{}\par}
-{\large im Studiengang \studiengang\par}
-\vspace{1.5cm}
-{\large über das Thema\par}
-\vspace{0.8cm}
-{\Large\bfseries Analyse von Prozessineffizienzen durch Process Mining in ERP-Systemen:\\[0.3cm]
-Eine Untersuchung der Datenstrukturen und Algorithmen am Beispiel des Order-to-Cash-Prozesses\par}
-\vspace{1.5cm}
-{\large Betreuer: Dipl.-Ing. Sandro Coletta\par}
-\vfill
-{\large von\par}
-{\large\bfseries Tom Potthoff\par}
-{\large Matrikelnummer: \matrikelnummer\par}
-\vspace{0.8cm}
-{\large Abgabedatum: 16.07.2026\par}
+    \newgeometry{left=2cm, right=2cm, top=2cm, bottom=2cm}
+    \thispagestyle{empty}
+
+    \begin{center}
+        % ── Logo ──────────────────────────────────────────────────────
+        \includegraphics[width=2.5cm]{figures/fom_logo.pdf}\par
+        \vspace{0.35cm}
+        
+        % ── Hochschulname ─────────────────────────────────────────────
+        {\Large\bfseries FOM Hochschule für Oekonomie \& Management\par}
+        \vspace{0.1cm}
+        {\large \langde{Hochschulzentrum}\langen{University Location} \myStandort\par}
+        \vspace{0.75cm}
+        
+        % ── Studienarbeit + Studiengang ──────────────────────────────
+        {\Large\bfseries \myStudienarbeit\par}
+        \vspace{0.1cm}
+        {\normalsize \langde{im Studiengang}\langen{in the study course} \myStudiengang\par}
+        \vspace{0.65cm}
+
+        % ── Grad oder Modul ───────────────────────────────────────────
+        \ifThesis{%
+            {\normalsize \langde{zur Erlangung des Grades eines}\langen{to obtain the degree of}\par}
+            \vspace{0.1cm}
+            {\LARGE \myGrad\par}
+            \vspace{0.65cm}
+        }{%
+            {\normalsize \langde{im Modul}\langen{in the module}\par}
+            \vspace{0.1cm}
+            {\LARGE \myModul\par}
+            \vspace{0.65cm}
+        }
+
+        % ── Titel der Arbeit ─────────────────────────────────────────
+        {\normalsize \langde{über das Thema}\langen{on the subject}\par}
+        \vspace{0.1cm}
+        {\Large\bfseries \myTitel\par}
+        \vspace{0.75cm}
+
+        % ── Name des Verfassers ──────────────────────────────────────
+        {\normalsize \langde{von}\langen{by}\par}
+        \vspace{0.15cm}
+        {\large \myAutor\par}
+        \vspace{0.75cm}
+        
+        % ── Metadaten und Wortzahlen ─────────────────────────────────
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{}p{5.2cm}p{8.3cm}@{}}
+        \myBetreuerLabel: 
+        & \myBetreuer \\
+
+        \langde{Matrikelnummer}\langen{Matriculation Number}: 
+        & \myMatrikelnummer \\
+
+        \langde{Abgabedatum}\langen{Submission}: 
+        & \myDatum \\
+
+        \langde{Wortzahl Seminararbeit}\langen{Wortzahl Seminararbeit}: 
+        & 4719 Wörter \\
+
+        \langde{Wortzahl Quelltext}\langen{Wortzahl Quelltext}: 
+        & 560.368 Wörter \\[0.25cm]
+
+        \end{tabular}
+
+    \end{center}
+
+    \restoregeometry
 \end{titlepage}
