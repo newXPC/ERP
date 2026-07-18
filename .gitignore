@@ -1,0 +1,15 @@
+# LaTeX build artifacts (Overleaf kompiliert selbst)
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.run.xml
+build*.log
+main.pdf

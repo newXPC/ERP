@@ -1,0 +1,37 @@
+\section{Anpassung und Lösungsansätze}
+
+
+\subsection{Vorschläge zur Anpassung der Unternehmensprozesse}
+
+Die in Kapitel 4.5 quantifizierten Gaps wurden zwar simulativ erzeugt, entsprechen aber Konfigurations- und Organisationsmustern, wie sie in Praxisberichten zu SAP-Anwenderunternehmen wiederkehrend beschrieben werden.\footnote{Vgl. Reinkemeyer (2020), S. 3 ff.; Peters/Nauroth (2019), S. 21 ff.} Dieses Kapitel leitet daher ab, wie ein Unternehmen mit diesen Mustern die gemessenen Ineffizienzen beheben kann, gegliedert nach organisatorischen Maßnahmen, Customizing und Erweiterungen.
+
+Auf organisatorischer Ebene setzen drei Maßnahmen an den Wurzeln der Muster an. Erstens eine Stammdaten-Governance: Für Kundenstammdaten werden Pflichtattribute, Verantwortlichkeiten und ein Bereinigungsprojekt definiert; das Vorgehen orientiert sich an den bewährten Schritten der Datenmigration: Datenquellen identifizieren, klassifizieren, bereinigen und die Qualität kontinuierlich überwachen.\footnote{Vgl. Coletta (2026f), Folie 324 ff.} Vollständige Versanddaten und Incoterms entziehen den Liefersperren (G3) die Grundlage. Zweitens die Entlastung der Auftragserfassung, etwa durch elektronischen Datenaustausch mit den umsatzstärksten Kunden; das reduziert Erfassungsfehler und damit die Änderungsschleife (G2). Drittens ein definierter Reklamationsprozess mit Rollen und Fristen, der die Gutschrifts- und Nachlieferungsfälle (G6) aus der informellen E-Mail-Bearbeitung in einen messbaren Ablauf überführt.
+
+
+\subsection{Möglichkeiten des Customizings im SAP-System}
+
+Der Großteil der Gaps lässt sich ohne Programmierung im Customizing schließen; Tabelle 7 ordnet jedem Gap die Maßnahme und den SAP-Bezug zu. Kern ist die Automatisierung der Kreditprüfung im SAP Credit Management: Bestandskunden mit gutem Zahlungsverhalten erhalten regelbasierte Scores und Limits, sodass Sperren nur noch bei tatsächlichen Risikofällen entstehen (G1). Die Unvollständigkeitsprüfung und Pflichtfeldsteuerung verhindert Aufträge mit fehlenden Versanddaten (G3), die Umstellung des Fakturavorrats auf tägliche Läufe beseitigt die künstliche Wartezeit vor der Rechnungsstellung (G4), und ein restriktives Berechtigungskonzept für manuelle Preisänderungen erzwingt die Pflege im Konditionsstamm (G5). Zu den typischen Customizing-Aktivitäten zählen dabei das Abbilden von Geschäftsprozessen, Grundeinstellungen und Berechtigungen\footnote{Vgl. Coletta (2026f), Folie 349.}; Workflows für Freigaben (hier für Gutschriften) sind Teil der Systemkonfiguration.\footnote{Vgl. Coletta (2026d), Folie 244.}
+
+\begin{table}[htbp]
+\centering
+\caption{Maßnahmenkatalog: Gaps, Lösungsansätze und SAP-Bezug}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\RaggedRight\arraybackslash}p{2.5cm} >{\RaggedRight\arraybackslash}p{2.1cm} Y Y@{}}
+\toprule
+\textbf{Maßnahme} & \textbf{Typ} & \textbf{SAP-Bezug} & \textbf{Adressiertes Gap /\allowbreak{} erwarteter Effekt} \\
+\midrule
+M1 Automatisierte Kreditprüfung & Customizing & SAP Credit Management: Scoring-Regeln, Limitprofile, Ausnahmeliste & G1: Sperrquote von 34,1 \% deutlich reduziert; Median-Liegezeit 1,9 AT entfällt für Bestandskunden \\
+M2 Stammdatenbereinigung u. Pflichtfelder & organisatorisch + Customizing & Unvollständigkeitsprüfung, Pflichtfeldsteuerung, Geschäftspartnerpflege & G3: Liefersperrenquote von 12,3 \% Richtung Restrisiko; 3,9 $\rightarrow$ 0,8 AT bis Lieferbeleg \\
+M3 Tägliche Fakturierungsläufe & Customizing & Fakturavorrat (VF04/\allowbreak{}VF06) als täglicher Hintergrundjob & G4: Liegezeit WA $\rightarrow$ Faktura von 2,6 auf ca. 0,5 AT \\
+M4 Konditionspflege u. Berechtigungen & Customizing + organisatorisch & Preisfindung/\allowbreak{}Konditionstechnik, Rollenkonzept & G5: Fakturasperren (7,9 \%) weitgehend vermieden \\
+M5 Workflow Reklamation/\allowbreak{}Gutschrift & Customizing/\allowbreak{}Workflow & Freigabeworkflow für Gutschriftsanforderungen & G6: definierte Durchlaufzeit, Transparenz \\
+M6 EDI-Anbindung Top-Kunden & Erweiterung & IDoc-Eingang für Bestellungen (ORDERS) & G2: Änderungsquote (22,7 \%) sinkt; weniger Erfassungsfehler \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\subsection{Modifikationen, Erweiterungen und kontinuierliches Monitoring}
+
+Eigenentwicklungen oder Modifikationen des SAP-Standards sind für keines der sechs Gaps erforderlich, im Einklang mit dem Leitsatz „So viel Standard wie möglich, so wenig Customizing wie nötig“.\footnote{Coletta (2026d), Folie 248.} Als Erweiterung im Sinne des Enhancement-Typs des Process Mining empfiehlt sich jedoch ein kontinuierliches Prozessmonitoring: Die Extraktionslogik aus Kapitel 4.2 wird als wiederkehrender Ladeprozess eingerichtet, sodass Kennzahlen wie Sperrquoten, Liegezeiten und Happy-Path-Anteil laufend überwacht und Maßnahmenwirkungen gemessen werden können. Damit wandelt sich Process Mining von einer einmaligen Diagnose zu einem dauerhaften Steuerungsinstrument, wie es in der Praxis großer Anwender etabliert ist.\footnote{Vgl. Reinkemeyer (2020), S. 3 ff.} Die in dieser Arbeit verwendete Werkzeugkette aus Python und PM4Py zeigt, dass dafür nicht zwingend eine kommerzielle Plattform erforderlich ist.
+

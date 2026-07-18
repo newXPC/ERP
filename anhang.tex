@@ -1,0 +1,81 @@
+\phantomsection\addcontentsline{toc}{section}{Anhang}
+\section*{Anhang}
+
+
+\subsection*{A1 Auszug aus dem Event-Log}
+\addcontentsline{toc}{subsection}{A1 Auszug aus dem Event-Log}
+
+Der folgende Auszug zeigt zwei repräsentative Fälle aus dem synthetischen Log: einen Happy-Path-Fall (800002) und einen Fall mit Liefersperre, Falschlieferung, Gutschrift und Nachlieferung (800347). Ein Fall mit Kreditsperre und Auftragsänderung ist in Tabelle 3 dargestellt. Alle Ressourcenkennungen sind synthetisch.
+
+{\small
+\begin{longtable}{@{}l l l l@{}}
+\toprule
+\textbf{Case-ID} & \textbf{Aktivität} & \textbf{Zeitstempel} & \textbf{Ressource} \\
+\midrule\endhead
+800002 & Auftrag angelegt & 22.09.2025 11:22:10 & VERT-11 \\
+800002 & Auftrag freigegeben & 22.09.2025 11:25:10 & SYSTEM \\
+800002 & Lieferung angelegt & 23.09.2025 06:30:29 & SYSTEM \\
+800002 & Warenausgang gebucht & 24.09.2025 15:13:53 & LAG-03 \\
+800002 & Faktura erstellt & 29.09.2025 03:10:49 & BATCH-VF06 \\
+800002 & Zahlung verbucht & 03.11.2025 (tagesgenau) & FI-DEB-03 \\
+800347 & Auftrag angelegt & 27.01.2026 10:44:40 & VERT-04 \\
+800347 & Auftrag freigegeben & 27.01.2026 10:48:40 & SYSTEM \\
+800347 & Liefersperre gesetzt & 27.01.2026 10:48:42 & SYSTEM \\
+800347 & Lieferung angelegt & 03.02.2026 06:30:40 & SYSTEM \\
+800347 & Warenausgang gebucht & 05.02.2026 17:54:07 & LAG-06 \\
+800347 & Faktura erstellt & 09.02.2026 03:10:21 & BATCH-VF06 \\
+800347 & Gutschrift erstellt & 23.02.2026 12:39:05 & VERT-04 \\
+800347 & Lieferung angelegt & 24.02.2026 06:30:00 & SYSTEM \\
+800347 & Warenausgang gebucht & 25.02.2026 17:09:45 & LAG-01 \\
+800347 & Faktura erstellt & 02.03.2026 03:10:19 & BATCH-VF06 \\
+800347 & Zahlung verbucht & 30.03.2026 (tagesgenau) & FI-DEB-01 \\
+\bottomrule
+\end{longtable}}
+
+
+\subsection*{A2 Parameter des Simulationsmodells (Reproduzierbarkeit)}
+\addcontentsline{toc}{subsection}{A2 Parameter des Simulationsmodells (Reproduzierbarkeit)}
+
+Der Log wurde mit einem Python-Skript erzeugt (Zufallsgenerator-Seed 42; PM4Py-Version 2.7; Simulationszeitraum 01.07.2025 bis 30.06.2026; 12.000 Fälle, 84.121 Ereignisse, 11 Aktivitätstypen; Export als CSV und XES). Liegezeiten werden als Lognormalverteilungen über Arbeitstage modelliert (Wochenenden übersprungen); die Fakturierung erfolgt im wöchentlichen Sammellauf (montags 03:10 Uhr); das Zahlungsdatum ist tagesgenau modelliert (analog BSEG-AUGDT).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}Y l l Y@{}}
+\toprule
+\textbf{Muster} & \textbf{Wahrscheinlichkeit} & \textbf{Verzögerung (Median)} & \textbf{gemessen im Log} \\
+\midrule
+K1 Auftragsänderung (davon mehrfach) & 0,22 (0,31) & 0,6 AT je Änderung & 2.725 Fälle (22,7 \%); 814 mehrfach \\
+K2 Kreditsperre + manuelle Freigabe & 0,34 & 1,8 AT & 4.086 Fälle (34,1 \%); Median 1,9 AT \\
+K3 Liefersperre & 0,13 & 2,9 AT & 1.470 Fälle (12,3 \%); Median 3,9 AT bis Lieferbeleg \\
+K4 Wochen-Batch-Fakturierung & alle Fälle & Sammellauf montags & Median 2,6 AT WA $\rightarrow$ Faktura \\
+K5 Fakturasperre (manuelle Preise) & 0,077 & 1,5 AT & 944 Fälle (7,9 \%) \\
+K6 Gutschrift /\allowbreak{} Nachlieferung & 0,045 /\allowbreak{} 0,04 & 6,0 /\allowbreak{} 1,5 AT & 532 /\allowbreak{} 471 Fälle \\
+Zahlungsziel-Verhalten & -- & 38 Tage (lognormal) & Median 38 Tage Faktura $\rightarrow$ Zahlung \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\subsection*{A3 Kennzahlen des Prozessmonitorings}
+\addcontentsline{toc}{subsection}{A3 Kennzahlen des Prozessmonitorings}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}Y l l Y@{}}
+\toprule
+\textbf{Kennzahl} & \textbf{Ist (gemessen)} & \textbf{Zielwert nach Maßnahmen} & \textbf{Wesentlicher Hebel} \\
+\midrule
+Anteil Fälle mit Kreditsperre & 34,1 \% & ca. 10 \% & M1 automatisierte Kreditprüfung \\
+Anteil Fälle mit Liefersperre & 12,3 \% & ca. 5 \% & M2 Stammdatenqualität \\
+Liegezeit Warenausgang $\rightarrow$ Faktura (Median) & 2,6 AT & ca. 0,5 AT & M3 tägliche Fakturierung \\
+Fälle mit Fakturasperre & 944 (7,9 \%) & \textless{} 350 & M4 Konditionspflege, Berechtigungen \\
+Manueller Klärungsaufwand p. a. (geschätzt) & ca. 1.950 h & \textless{} 700 h & M1--M5 \\
+Durchlaufzeit Auftrag $\rightarrow$ Faktura (Median) & 5,8 AT & ca. 4,5 AT & M1--M4 \\
+Happy-Path-Anteil (konforme Fälle) & 38,9 \% & \textgreater{} 65 \% & alle Maßnahmen \\
+Anzahl Prozessvarianten & 85 & \textless{} 40 & alle Maßnahmen \\
+\bottomrule
+\end{tabularx}
+\end{table}
+

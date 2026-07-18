@@ -1,0 +1,40 @@
+\section{Implementierungsstrategie}
+
+
+\subsection{Schrittweise Umsetzung}
+
+Die Umsetzung der Maßnahmen folgt den etablierten Phasen einer ERP-Anpassung: Projektplanung, Systemkonfiguration, Datenmigration bzw. -bereinigung, Testphase, Schulung und Go-Live.\footnote{Vgl. Coletta (2026f), Folie 322 und 350.} Insgesamt ist sie auf sechs Monate ausgelegt (Abbildung 7). Nach dem Detailkonzept (P1) laufen die Stammdatenbereinigung (P2) und das Customizing des Kreditmanagements (P3) parallel; die Umstellung der Fakturierungsläufe (P4) ist bewusst früh terminiert, weil sie mit geringem Aufwand die größte Liquiditätswirkung entfaltet („Quick Win“, vgl. Abbildung 6). Es folgen der Gutschriften-Workflow (P5), Integrationstests und Schulungen (P6) sowie Go-Live mit Hypercare-Phase (P7). Die Planung nutzt die klassischen Instrumente Projektstrukturplan, Meilensteine und Gantt-Diagramm.\footnote{Vgl. Coletta (2026c), Folie 238.}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image7.png}
+\caption{Implementierungsplan über sechs Monate (Quelle: eigene Darstellung)}
+\end{figure}
+
+
+\subsection{Zeitplan und notwendige Ressourcen}
+
+Für die Testphase sind Integrations-, User-Acceptance- und Regressionstests mit realistischen Testdaten vorgesehen.\footnote{Vgl. Coletta (2026f), Folie 333 und 335.} Personell erfordert das Vorhaben eine interne Projektleitung (ca. 0,3 VZÄ), je einen Key-User aus Vertrieb, Versand und Debitorenbuchhaltung (je ca. 0,2 VZÄ), externe SD-/FSCM-Beratung (ca. 25 Personentage) sowie die IT für Berechtigungen und Hintergrundjobs; die externen Kosten lassen sich (als grobe Setzung auf Basis marktüblicher Beratungstagessätze) auf 60.000 bis 80.000 \euro{} schätzen. Dem stehen im modellierten Szenario rund 1.950 eingesparte Klärungsstunden pro Jahr (ca. 1,2 VZÄ) sowie eine um mehrere Tage verkürzte Zeitspanne bis zur Rechnungsstellung gegenüber, die die Forderungslaufzeit unmittelbar senkt; nach der ROI-Logik der Vorlesung amortisiert sich das Vorhaben unter diesen Annahmen bereits im ersten Jahr.\footnote{Vgl. zur ROI-Berechnung Coletta (2026f), Folie 343 ff.; Coletta (2026g), Folie 386 ff.} Nach dem Go-Live werden Erfolgskriterien als Post-Go-Live-Metriken definiert und in der Hypercare-Phase proaktiv überwacht\footnote{Vgl. Coletta (2026f), Folie 337 und 341.}, unmittelbar über das Prozessmonitoring aus Kapitel 5.3 mit den Kennzahlen aus Anhang A3.
+
+
+\subsection{Risikobewertung und Managementstrategien}
+
+Dass ERP-nahe Projekte ihre Zeitpläne häufig überschreiten, ist empirisch gut belegt: Nur rund 21 Prozent der ERP-Implementierungen bleiben im Zeitplan; als Hauptgründe gelten organisatorische Probleme, unrealistische Zeitpläne und Scope-Ausweitung.\footnote{Vgl. Panorama Consulting/Statista, zit. nach Coletta (2026c), Folie 211 und 213.} Tabelle 8 bewertet die wichtigsten Risiken und hinterlegt Gegenmaßnahmen. Hervorzuheben ist das Datenschutzrisiko, das beim Übergang von synthetischen auf reale Event-Logs entsteht: Reale Logs enthalten Benutzerkennungen und erlauben Leistungs- und Verhaltensauswertungen; Betriebsrat und Datenschutzbeauftragte sind daher früh einzubinden, und die Analysen sind auf pseudonymisierte, nicht personenbezogene Auswertungen zu beschränken.
+
+\begin{table}[htbp]
+\centering
+\caption{Risikomatrix der Implementierung}
+\small
+\begin{tabularx}{\textwidth}{@{}Y l l Y@{}}
+\toprule
+\textbf{Risiko} & \textbf{Eintritt} & \textbf{Auswirkung} & \textbf{Gegenmaßnahme} \\
+\midrule
+Datenqualität schlechter als angenommen (Stammdaten) & hoch & mittel & frühe Testextraktion, Bereinigung priorisieren, Puffer in P2 \\
+Zu scharfe Kreditregeln blockieren Aufträge /\allowbreak{} zu laxe erhöhen Forderungsausfälle & mittel & hoch & Pilotbetrieb mit Parallellauf, Schwellenwerte iterativ justieren, Ausnahmeliste \\
+Akzeptanz: Mitarbeitende fühlen sich durch Prozessdaten überwacht (reale Logs) & mittel & hoch & Pseudonymisierung, Betriebsvereinbarung, transparente Kommunikation der Ziele \\
+Scope-Ausweitung (weitere Prozesse „auch noch schnell“) & mittel & mittel & Change-Request-Verfahren, Priorisierung nach Nutzwert \\
+Wissensabfluss nach Beratungsende & niedrig & mittel & Dokumentation, Key-User-Schulung, Betreuungsvereinbarung \\
+\bottomrule
+\end{tabularx}
+\end{table}
+

@@ -1,14 +1,69 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+\documentclass[12pt,a4paper]{article}
 
-\title{ERP}
-\author{Tom Potthoff}
-\date{July 2026}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{ragged2e}
+\usepackage{caption}
+\usepackage{eurosym}
+\usepackage[hidelinks]{hyperref}
+
+% text-wrapping X column, left-aligned
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+
+\setstretch{1.5}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+
+% ---- Titelblatt-Platzhalter: hier einmal ausfüllen ----
+\newcommand{\standort}{[Standort]}
+\newcommand{\studiengang}{[Studiengang]}
+\newcommand{\matrikelnummer}{[Matrikelnummer]}
 
 \begin{document}
 
-\maketitle
+\input{titlepage}
 
-\section{Introduction}
+\clearpage
+\pagenumbering{Roman}
+\tableofcontents
+\clearpage
+\listoffigures
+\listoftables
+\clearpage
+
+\phantomsection\addcontentsline{toc}{section}{Abkürzungsverzeichnis}
+\section*{Abkürzungsverzeichnis}
+\input{abkuerzungsverzeichnis}
+
+\clearpage
+\pagenumbering{arabic}
+
+\input{chapters/sec_01}
+\input{chapters/sec_02}
+\input{chapters/sec_03}
+\input{chapters/sec_04}
+\input{chapters/sec_05}
+\input{chapters/sec_06}
+\input{chapters/sec_07}
+\input{chapters/sec_08}
+
+\clearpage
+\input{anhang}
+
+\clearpage
+\input{literatur}
+
+\clearpage
+\input{kiverzeichnis}
 
 \end{document}

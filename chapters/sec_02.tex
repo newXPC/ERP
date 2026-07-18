@@ -1,0 +1,42 @@
+\section{Beschreibung des aktuellen Prozesses}
+
+
+\subsection{Der Order-to-Cash-Prozess und seine typischen Schwachstellen}
+
+Der untersuchte Prozess folgt dem klassischen Ablauf der Auftragsabwicklung: Ein eingehender Kundenauftrag wird im Vertriebsinnendienst erfasst, durchläuft eine Kreditprüfung, wird zur Logistik freigegeben, dort kommissioniert und mit Warenausgang ausgeliefert, anschließend fakturiert und schließlich durch den Zahlungseingang abgeschlossen.\footnote{Vgl. Coletta (2026a), Folie 62 f.} Abbildung 1 zeigt den Prozess zusammen mit sechs Störungsmustern (K1--K6), die in der betrieblichen Praxis immer wieder beobachtet werden: nachträgliche Auftragsänderungen mit Klärungsschleifen (K1), manuelle Kreditprüfungen mit Liegezeiten (K2), Liefersperren infolge lückenhafter Kundenstammdaten (K3), Fakturierung nur im wöchentlichen Sammellauf (K4), Fakturasperren durch manuell im Auftrag geänderte Preise (K5) sowie Reklamationen mit Gutschrift und Nachlieferung nach Falschlieferungen (K6). Diese sechs Muster bilden die Grundwahrheit der Untersuchung: Sie werden in den Datensatz kontrolliert injiziert (Kapitel 2.2) und müssen von der Analyse in Kapitel 4 wiedergefunden und quantifiziert werden.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image1.png}
+\caption{Untersuchter O2C-Prozess mit den sechs injizierten Störungsmustern K1--K6 (Quelle: eigene Darstellung)}
+\end{figure}
+
+
+\subsection{Datengrundlage: öffentliche und synthetische Event-Logs}
+
+Wer Process-Mining-Methoden untersuchen will, ohne auf vertrauliche Unternehmensdaten zuzugreifen, hat zwei etablierte Optionen. Die erste sind öffentliche Real-Logs, allen voran die Datensätze der jährlichen BPI Challenge: Der BPI-Challenge-2019-Log etwa dokumentiert den Bestellabwicklungsprozess (Purchase-to-Pay) eines multinationalen Konzerns mit rund 1,6 Millionen Ereignissen zu etwa 250.000 Bestellpositionen und stammt aus einem realen ERP-System.\footnote{Vgl. van Dongen (2019).} Für die vorliegende Fragestellung ist er jedoch nur eingeschränkt geeignet: Er bildet den Einkaufs-, nicht den Vertriebsprozess ab, seine Aktivitäten entsprechen also nicht dem SD-Belegfluss des O2C-Prozesses, und die tatsächlichen Prozessschwächen des anonymen Konzerns sind unbekannt. Eine Validierung der Analyseergebnisse gegen eine Grundwahrheit ist damit unmöglich.
+
+Die Arbeit nutzt daher die zweite Option: einen synthetischen SAP-O2C-Event-Log, der mit einem Python-Simulationsskript erzeugt und mit der Open-Source-Bibliothek PM4Py verarbeitet wird.\footnote{Vgl. zu PM4Py Berti/van Zelst/van der Aalst (2019).} Simuliert werden 12.000 Kundenaufträge eines Geschäftsjahres (01.07.2025 bis 30.06.2026) entlang des SAP-Belegflusses aus Kapitel 3; die sechs Störungsmuster aus Abbildung 1 werden mit festen Wahrscheinlichkeiten und Verzögerungsverteilungen injiziert (vollständige Parameter in Anhang A2). Der resultierende Log umfasst 84.121 Ereignisse zu elf Aktivitätstypen und wird sowohl als CSV-Tabelle als auch im XES-Format exportiert. Das Vorgehen ist vollständig reproduzierbar (fester Zufalls-Seed 42: jeder Lauf erzeugt denselben Log), erfordert keine Firmenfreigabe und wirft keine Datenschutzfragen auf, weil alle Benutzerkennungen synthetisch sind. Damit weicht die Arbeit bewusst von dem in der Aufgabenstellung skizzierten Konstrukt eines fiktionalen Unternehmens ab: An die Stelle frei erfundener, nicht nachprüfbarer Unternehmenszahlen tritt ein offengelegter, reproduzierbarer Datensatz; die vorgegebene Kapitelstruktur bleibt davon unberührt. Der Preis dafür ist eine bewusste Einschränkung: Der Log zeigt modelliertes, kein real gewachsenes Verhalten, worauf in Kapitel 8 zurückzukommen ist.
+
+
+\subsection{Analyse der involvierten Stammdaten und Bewegungsdaten}
+
+Die Daten eines Anwendungssystems lassen sich in Stammdaten, Bewegungsdaten und Organisationsdaten unterteilen.\footnote{Vgl. Coletta (2026a), Folie 16.} Stammdaten sind langlebige, zustandsorientierte Daten, die über viele Geschäftsvorfälle hinweg unverändert genutzt werden; Bewegungsdaten entstehen dagegen vorgangsbezogen mit jedem einzelnen Geschäftsvorfall.\footnote{Vgl. Coletta (2026f), Folie 322; Gronau (2014), S. 165 ff.} Tabelle 1 ordnet die im O2C-Prozess involvierten Daten dieser Klassifikation zu.
+
+\begin{table}[htbp]
+\centering
+\caption{Stamm-, Bewegungs- und Organisationsdaten im O2C-Prozess}
+\small
+\begin{tabularx}{\textwidth}{@{}l Y Y@{}}
+\toprule
+\textbf{Datenklasse} & \textbf{Beispiele im O2C-Prozess} & \textbf{Relevanz für die Prozessanalyse} \\
+\midrule
+Stammdaten & Kundenstamm (Adressen, Zahlungs- u. Versandbedingungen, Incoterms), Materialstamm, Preis-/\allowbreak{}Konditionsstamm, Kreditstammdaten & Fehlende oder veraltete Attribute lösen Sperren und Klärungen aus (K2, K3, K5) \\
+Bewegungsdaten & Angebote, Kundenaufträge, Lieferbelege, Warenausgangsbuchungen, Fakturen, Gutschriften, Zahlungseingänge & Tragen Zeitstempel und Nutzerkennung -- Rohmaterial des Event-Logs \\
+Organisationsdaten & Verkaufsorganisation, Vertriebsweg, Sparte, Werk, Versandstelle, Buchungskreis & Legen Zuständigkeiten fest; ermöglichen Filterung und Vergleich von Prozessvarianten \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Bereits diese fachliche Bestandsaufnahme zeigt, wo Prozess- und Datenqualität zusammenhängen: Dubletten im Kundenstamm, ungepflegte Versanddaten oder Sonderpreise, die statt im Konditionsstamm direkt im Auftrag gepflegt werden, erzeugen die Sperren- und Klärungsmuster K2, K3 und K5. Geringe Datenqualität schlägt zudem nach dem GiGo-Prinzip („Garbage in, Garbage out“) unmittelbar auf jede datengetriebene Auswertung durch.\footnote{Vgl. Coletta (2026e), Folie 314 ff.}
+

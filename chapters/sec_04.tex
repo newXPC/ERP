@@ -1,0 +1,138 @@
+\section{Fit/Gap-Analyse}
+
+
+\subsection{Vorgehen und Grundlagen des Process Mining}
+
+Eine klassische Fit/Gap-Analyse vergleicht die Unternehmensprozesse mit den im Standard vorgesehenen SAP-Prozessen und identifiziert Übereinstimmungen (Fits) und Lücken (Gaps), typischerweise in Workshops. In dieser Arbeit wird der Vergleich datengetrieben geführt: Der tatsächliche Prozessablauf wird per Process Mining aus dem Event-Log rekonstruiert (Discovery) und anschließend gegen den SAP-Referenzprozess aus Kapitel 3.1 abgeglichen (Conformance Checking). Gaps sind dann nicht vermutete, sondern gemessene Abweichungen. Das Kapitel bildet den Theorie-Praxis-Transfer der Arbeit: Auf die wissenschaftlichen Grundlagen (Abschnitte 4.1 bis 4.3) folgt die Anwendung auf den Log aus Kapitel 2.2 (Abschnitte 4.4 und 4.5) -- mit dem Anspruch, die dort injizierte Grundwahrheit wiederzufinden.
+
+Process Mining bezeichnet eine Familie von Techniken, die Wissen über reale Geschäftsprozesse aus Ereignisprotokollen (Event-Logs) extrahieren und damit die Brücke zwischen datenorientierter Analyse (Data Mining) und modellorientiertem Geschäftsprozessmanagement schlagen.\footnote{Vgl. van der Aalst (2016), S. 3 ff.; van der Aalst et al. (2012), S. 169 ff.} Das Process Mining Manifesto unterscheidet drei Typen (Abbildung 3): Discovery erzeugt aus einem Event-Log ohne Vorwissen ein Prozessmodell; Conformance Checking vergleicht ein Event-Log mit einem existierenden (Soll-)Modell und lokalisiert Abweichungen; Enhancement erweitert oder verbessert ein Modell anhand der Log-Informationen, etwa um Durchlaufzeiten und Engpässe.\footnote{Vgl. van der Aalst et al. (2012), S. 176 f.} In der Systematik der Datenanalyse gehört Process Mining damit zur beschreibenden und diagnostischen Analytik.\footnote{Vgl. Coletta (2026j), Folie 458 und 470.}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image3.png}
+\caption{Die drei Typen des Process Mining (Quelle: eigene Darstellung nach van der Aalst et al. (2012), S. 172 ff.)}
+\end{figure}
+
+
+\subsection{Datenstrukturen: vom SAP-Beleg zum Event-Log}
+
+Die zentrale Datenstruktur des Process Mining ist das Event-Log. Es besteht aus Fällen (Cases), die jeweils eine geordnete Folge von Ereignissen (Events) enthalten. Jedes Ereignis muss mindestens drei Attribute tragen: eine Fallzuordnung (Case-ID), eine Aktivitätsbezeichnung (Activity) und einen Zeitstempel (Timestamp); hinzu kommen optionale Attribute wie ausführende Ressource, Beträge oder Organisationseinheiten.\footnote{Vgl. van der Aalst (2016), S. 125 ff.} Für den Austausch von Event-Logs hat sich das XML-basierte XES-Format (eXtensible Event Stream) als IEEE-Standard etabliert\footnote{Vgl. IEEE Std 1849-2016.}; auch der hier untersuchte Log wird in diesem Format exportiert. Tabelle 3 zeigt einen vollständigen Fall aus dem Log (Case 800012, Kreditsperre und eine Auftragsänderung) zusammen mit den SAP-Datenquellen, aus denen das jeweilige Ereignis in einem realen System extrahiert würde; ein längerer Auszug findet sich in Anhang A1.
+
+\begin{table}[htbp]
+\centering
+\caption{Fall 800012 aus dem Event-Log mit den korrespondierenden SAP-Datenquellen}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}l l l l Y@{}}
+\toprule
+\textbf{Case-ID} & \textbf{Aktivität} & \textbf{Zeitstempel} & \textbf{Ressource} & \textbf{SAP-Quelle (reales System)} \\
+\midrule
+800012 & Auftrag angelegt & 29.08.2025 16:05:54 & VERT-05 & VBAK.ERDAT/\allowbreak{}ERZET \\
+800012 & Kreditsperre gesetzt & 29.08.2025 16:05:55 & SYSTEM & CDPOS (VBAK-CMGST) \\
+800012 & Auftrag freigegeben & 02.09.2025 14:05:44 & FI-DEB-03 & CDPOS (VBAK-CMGST) \\
+800012 & Auftrag geändert & 04.09.2025 19:34:37 & VERT-05 & CDHDR (VERKBELEG) \\
+800012 & Lieferung angelegt & 05.09.2025 06:30:16 & SYSTEM & LIKP.ERDAT (via VBFA) \\
+800012 & Warenausgang gebucht & 08.09.2025 15:25:23 & LAG-04 & LIKP.WADAT\_IST \\
+800012 & Faktura erstellt & 15.09.2025 03:10:07 & BATCH-VF06 & VBRK.ERDAT (via VBFA) \\
+800012 & Zahlung verbucht & 29.10.2025 (tagesgenau) & FI-DEB-03 & BSEG.AUGDT \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Ein ERP-System führt kein natives Event-Log; das Protokoll muss aus den in Kapitel 3.2 beschriebenen Datenstrukturen rekonstruiert werden. Die Extraktion nutzt drei Quellentypen: die Anlege-Zeitstempel der Belegtabellen (VBAK, LIKP, VBRK, BKPF), die Belegflusstabelle VBFA zur Verkettung der Belege eines Falls sowie die Änderungsbelege CDHDR/CDPOS für Sperren, Preisänderungen und sonstige Eingriffe. Methodisch entspricht dies den klassischen Techniken zur Extraktion von Deltas aus operativen Systemen, zu denen insbesondere zeitstempelgesteuerte Verfahren und die Auswertung systemeigener Protokolle zählen.\footnote{Vgl. Inmon, zit. nach Coletta (2026i), Folie 421.} Wie beim Aufbau eines Data Warehouse, das analytische Datenbestände von der operativen Datenhaltung trennt, gilt auch hier, dass die Datenakquisition und -aufbereitung häufig 60 bis 80 Prozent der Projektzeit beansprucht.\footnote{Vgl. Coletta (2026i), Folie 414; zur Abgrenzung operativer und analytischer Datenhaltung Coletta (2026h), Folie 400 f.}
+
+Zwei Entwurfsentscheidungen prägen die Qualität des Logs. Die erste ist die Wahl der Case-ID: Hier dient die Kundenauftragsnummer (VBAK-VBELN) als Fallklammer, weil die Leitfragen auf die Auftragsabwicklung zielen. Diese Wahl hat Grenzen, die in der Literatur als Konvergenz- und Divergenzproblem beschrieben werden: Ein Auftrag kann in mehrere Teillieferungen zerfallen, und mehrere Aufträge können in einer Sammelfaktura zusammenlaufen. Die Zuordnung von Ereignissen zu genau einem Fall ist dann eine Vereinfachung der Wirklichkeit.\footnote{Vgl. van der Aalst (2019), S. 3 ff.; van der Aalst (2016), S. 148 ff.} Die zweite Entscheidung betrifft die Datenqualität: Attribute aus verschiedenen Tabellen müssen harmonisiert werden (Kodierungen, Synonyme, Schlüsseldisharmonien)\footnote{Vgl. Coletta (2026i), Folie 424 f.}, und Zeitstempel liegen in unterschiedlicher Granularität vor; das Zahlungsausgleichsdatum AUGDT etwa nur tagesgenau, was im Simulationsmodell bewusst nachgebildet wurde. Nach dem GiGo-Prinzip entwerten unentdeckte Datenmängel die gesamte Analyse.\footnote{Vgl. Coletta (2026e), Folie 314 ff.; zu Datenmängelklassen Coletta (2026i), Folie 422 f.; zu Datenqualitätsdimensionen Coletta (2026j), Folie 454.}
+
+
+\subsection{Algorithmen: Discovery und Conformance Checking}
+
+Der Alpha-Algorithmus ist der klassische Discovery-Algorithmus. Er leitet aus dem Log Ordnungsrelationen zwischen Aktivitätspaaren ab, nämlich direkte Folge (a \textgreater{} b), Kausalität (a $\rightarrow$ b), Parallelität (a $\parallel$ b) und Unabhängigkeit (a \# b), verdichtet sie in einer Footprint-Matrix und konstruiert daraus ein Petri-Netz.\footnote{Vgl. van der Aalst/Weijters/Măruşter (2004), S. 1128 ff.; van der Aalst (2016), S. 167 ff.} Für reale ERP-Daten ist er nur eingeschränkt geeignet: Er unterscheidet nicht zwischen häufigem und seltenem Verhalten (Rauschempfindlichkeit), kann kurze Schleifen strukturell nicht korrekt erkennen und setzt ein vollständiges Log voraus.\footnote{Vgl. van der Aalst (2016), S. 174 ff. und S. 190 ff.}
+
+Der Heuristics Miner adressiert diese Schwächen, indem er Häufigkeiten auswertet: Aus den Zählungen direkter Folgen berechnet er ein Abhängigkeitsmaß zwischen den Aktivitäten und nimmt nur Kanten oberhalb konfigurierbarer Schwellenwerte in den Abhängigkeitsgraphen auf. Das Abhängigkeitsmaß a $\Rightarrow$ b berechnet sich aus den Häufigkeiten der direkten Folgen als (\textbar{}a \textgreater{} b\textbar{} $-$ \textbar{}b \textgreater{} a\textbar{}) / (\textbar{}a \textgreater{} b\textbar{} + \textbar{}b \textgreater{} a\textbar{} + 1) und nähert sich nur dann dem Wert 1, wenn b sehr häufig auf a folgt, das Umgekehrte aber kaum vorkommt. Zufällige Einzelbeobachtungen erzeugen so keine Kanten. Seltenes Verhalten und Rauschen werden ausgeblendet, Schleifen korrekt behandelt.\footnote{Vgl. Weijters/van der Aalst (2003), S. 151 ff.} Der Inductive Miner wiederum zerlegt das Log rekursiv entlang dominanter Kontrollflussbeziehungen in einen Prozessbaum (Process Tree) und garantiert dadurch konstruktionsbedingt korrekte, „sound“ Modelle.\footnote{Vgl. Leemans/Fahland/van der Aalst (2013), S. 311 ff.} Tabelle 4 vergleicht die drei Algorithmen konzeptionell; ihre gemessenen Ergebnisse auf dem O2C-Log folgen in Kapitel 4.4.
+
+\begin{table}[htbp]
+\centering
+\caption{Vergleich zentraler Discovery-Algorithmen}
+\small
+\begin{tabularx}{\textwidth}{@{}l Y Y Y@{}}
+\toprule
+\textbf{Kriterium} & \textbf{Alpha-Algorithmus} & \textbf{Heuristics Miner} & \textbf{Inductive Miner} \\
+\midrule
+Grundprinzip & Ordnungsrelationen, Footprint-Matrix & häufigkeitsbasiertes Abhängigkeitsmaß, Schwellenwerte & rekursive Log-Zerlegung in Prozessbäume \\
+Ergebnismodell & Petri-Netz & Abhängigkeitsgraph (Heuristik-Netz) & Prozessbaum /\allowbreak{} Petri-Netz \\
+Robustheit geg. Rauschen & gering & hoch (filtert seltenes Verhalten) & hoch (Infrequent-Varianten) \\
+Schleifen & kurze Schleifen problematisch & korrekt behandelt & korrekt behandelt \\
+Soundness-Garantie & nein & nein & ja (konstruktionsbedingt) \\
+Eignung für ERP-Logs & gering (nur Lehrbeispiele) & hoch (Praxisstandard, gut interpretierbar) & hoch (formal fundiert) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Für den Soll-Ist-Abgleich stellt das Conformance Checking Verfahren bereit, mit denen sich ein Event-Log gegen ein Modell „abspielen“ lässt. Beim Token-Replay wird jeder Fall im Soll-Petri-Netz nachvollzogen; aus fehlenden und übrig bleibenden Tokens ergibt sich die Fitness als Maß, welcher Anteil des beobachteten Verhaltens vom Modell erklärt wird.\footnote{Vgl. Rozinat/van der Aalst (2008), S. 64 ff.} Aussagekräftiger, aber rechenintensiver sind Alignments, die jede Log-Spur auf den kostengünstigsten Pfad durch das Modell abbilden und dabei auch Ereignisse bestrafen, für die das Modell gar keine Transition vorsieht. Daneben werden die Qualitätsdimensionen Precision (kein Übergeneralisieren), Generalization und Simplicity unterschieden.\footnote{Vgl. van der Aalst (2016), S. 188 ff. und S. 243 ff.} Sämtliche Verfahren stehen in der Python-Bibliothek PM4Py quelloffen zur Verfügung, die in dieser Arbeit in Version 2.7 eingesetzt wird.\footnote{Vgl. Berti/van Zelst/van der Aalst (2019); zu Werkzeugen im Praxiseinsatz Peters/Nauroth (2019), S. 21 ff.; Reinkemeyer (2020), S. 3 ff.}
+
+
+\subsection{Durchführung der Analyse (Theorie-Praxis-Transfer)}
+
+Die Analyse folgt der Kette Generierung $\rightarrow$ Deskription $\rightarrow$ Discovery $\rightarrow$ Conformance. Der Log (12.000 Fälle, 84.121 Events, elf Aktivitäten) wurde zunächst deskriptiv ausgewertet: Er enthält 85 unterschiedliche Prozessvarianten. Die häufigste Variante, der störungsfreie Soll-Pfad („Happy Path“), deckt nur 38,9 Prozent der Fälle ab, die zehn häufigsten Varianten zusammen 89,2 Prozent (Abbildung 4). Das ist ein auch aus realen ERP-Analysen bekannter Befund: Eine Minderheit der Fälle folgt dem gedachten Standardablauf, der Rest verteilt sich auf einen langen Schwanz von Abweichungsvarianten.\footnote{Vgl. van der Aalst (2016), S. 125 ff.; Reinkemeyer (2020), S. 3 ff.}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image4.png}
+\caption{Kumulierte Variantenabdeckung des O2C-Logs (Quelle: eigene Auswertung mit PM4Py)}
+\end{figure}
+
+Anschließend wurden die drei Discovery-Algorithmen aus Kapitel 4.3 auf denselben Log angewendet; Tabelle 5 fasst die Messergebnisse zusammen. Der Alpha-Algorithmus scheitert erwartungsgemäß: Sein Petri-Netz (11 Transitionen, 15 Stellen, 33 Kanten) erreicht eine Token-Replay-Fitness von nur 0,646, und keine einzige Fallspur lässt sich vollständig abspielen. Die Schleifen (mehrfache Auftragsänderungen, Nachlieferungen) und das nebenläufige Störungsverhalten überfordern das Verfahren. Der Heuristics Miner (Abhängigkeitsschwelle 0,9) erreicht Fitness 0,972 bei 67,7 Prozent vollständig replayfähiger Fälle. Der Inductive Miner mit Rauschfilter 0,2 liefert das beste Modell: Fitness 0,996, 95,0 Prozent replayfähige Fälle und eine Precision von 0,913. Das Modell erklärt damit fast das gesamte beobachtete Verhalten, ohne wesentlich mehr zuzulassen, als beobachtet wurde. Die konzeptionelle Erwartung aus Tabelle 4 bestätigt sich empirisch.
+
+\begin{table}[htbp]
+\centering
+\caption{Messergebnisse der Discovery-Algorithmen auf dem O2C-Log (PM4Py, Token-Replay)}
+\small
+\begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{3.4cm} >{\RaggedRight\arraybackslash}p{3.0cm} c c c@{}}
+\toprule
+\textbf{Algorithmus} & \textbf{Modellgröße (Trans./\allowbreak{}Stellen/\allowbreak{}Kanten)} & \textbf{Fitness} & \textbf{vollständig passende Fälle} & \textbf{Precision} \\
+\midrule
+Alpha-Algorithmus & 11 /\allowbreak{} 15 /\allowbreak{} 33 & 0,646 & 0,0 \% & -- \\
+Heuristics Miner (Schwelle 0,9) & 20 /\allowbreak{} 14 /\allowbreak{} 43 & 0,972 & 67,7 \% & -- \\
+Inductive Miner (Rauschfilter 0,2) & 19 /\allowbreak{} 14 /\allowbreak{} 38 & 0,996 & 95,0 \% & 0,913 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Abbildung 5 zeigt das aus dem Log rekonstruierte Prozessmodell als Directly-Follows-Graph (DFG) mit Ereignis- und Kantenhäufigkeiten. Alle sechs injizierten Störungsmuster sind ohne Vorwissen aus den Daten sichtbar geworden: der Kreditsperren-Umweg (4.086 Fälle), die Änderungsschleife (3.752 Änderungsereignisse in 2.725 Fällen; 814 Fälle wurden mehrfach geändert, sichtbar als 1.027 direkte Wiederholungskanten), die Liefersperren (1.470), die Fakturasperren (944) sowie die Gutschriften (532) mit Nachlieferungen (471). Die Enhancement-Perspektive ergänzt die Zeitdimension (Abbildung 6): Die größten Liegezeiten entstehen vor der Lieferbelegerstellung bei Liefersperren (Median 3,9 Arbeitstage gegenüber 0,8 ohne Sperre), zwischen Warenausgang und Faktura (2,6 Arbeitstage, der Wochen-Batch) und vor der manuellen Kreditfreigabe (1,9 Arbeitstage).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image5.png}
+\caption{Aus dem Event-Log rekonstruiertes Ist-Modell des O2C-Prozesses (Quelle: eigene Auswertung mit PM4Py)}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image6.png}
+\caption{Median-Liegezeiten je Prozessübergang (Quelle: eigene Auswertung mit PM4Py)}
+\end{figure}
+
+
+\subsection{Identifizierte Gaps und ihre Auswirkungen}
+
+Für den formalen Soll-Ist-Abgleich wurde der SAP-Referenzprozess aus Kapitel 3.1 als sequenzielles Soll-Modell hinterlegt und der Log per Alignments dagegen abgeglichen. Das Ergebnis: Nur 38,9 Prozent der Fälle sind vollständig konform; die Alignment-Fitness des Gesamtlogs beträgt 0,921. Bemerkenswert ist der methodische Kontrast zum einfachen Token-Replay, das für dasselbe Soll-Modell eine scheinbare Fitness von 0,994 auswies. Dieses ignoriert Log-Ereignisse, für die das Modell keine Transition kennt, und ist für Soll-Modelle mit bewusst engem Aktivitätsumfang daher ungeeignet. Tabelle 6 verdichtet die Befunde zu sechs Gaps und stellt sie der injizierten Grundwahrheit gegenüber: Alle sechs Muster wurden wiedergefunden, und die gemessenen Häufigkeiten entsprechen im Rahmen der statistischen Erwartung den injizierten Parametern. Die Methodenvalidierung ist damit gelungen.
+
+\begin{table}[htbp]
+\centering
+\caption{Ergebnis der Fit/Gap-Analyse: gemessene Gaps und Vergleich mit der Grundwahrheit}
+\small
+\begin{tabularx}{\textwidth}{@{}Y l l Y@{}}
+\toprule
+\textbf{Gap (Messwert aus dem Log)} & \textbf{gemessen} & \textbf{injiziert (Soll-Parameter)} & \textbf{Auswirkung im Log} \\
+\midrule
+G1 Kreditsperre mit manueller Freigabe & 4.086 Fälle (34,1 \%) & p = 0,34 & Median 1,9 AT zusätzliche Liegezeit vor Freigabe \\
+G2 Auftragsänderungen nach Erfassung & 2.725 Fälle (22,7 \%); 814 mehrfach (29,9 \%) & p = 0,22; 31 \% mehrfach & Neuterminierung; verzögerte Lieferbelegerstellung \\
+G3 Liefersperren & 1.470 Fälle (12,3 \%) & p = 0,13 & Median 3,9 statt 0,8 AT bis zum Lieferbeleg \\
+G4 Wochen-Batch-Fakturierung & alle Fälle; Median 2,6 AT WA $\rightarrow$ Faktura & Sammellauf montags & verzögerte Forderungsstellung, DSO-Erhöhung \\
+G5 Fakturasperren (manuelle Preise) & 944 Fälle (7,9 \%) & p = 0,077 & Prüfschleife vor Faktura \\
+G6 Gutschrift/\allowbreak{}Nachlieferung & 532 /\allowbreak{} 471 Fälle (4,4 \% /\allowbreak{} 3,9 \%) & p = 0,045 /\allowbreak{} 0,04 & Doppelte Logistik- und Fakturakette je Fall \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Die betriebswirtschaftliche Wirkung lässt sich aus dem Log quantifizieren. Die Durchlaufzeit vom Auftragseingang bis zur Faktura liegt im Median bei 5,8 Arbeitstagen, in den störungsfreien Fällen bei 4,7; die Störungsmuster kosten also im Median rund einen Arbeitstag, in den betroffenen Fällen deutlich mehr (Abbildung 6). Unterstellt man für die manuellen Eingriffe Bearbeitungszeiten von 15 Minuten je Kreditfreigabe, 25 Minuten je Liefersperren-Klärung und 20 Minuten je Fakturasperre (eine bewusst vereinfachende Setzung zur Illustration der Größenordnung), binden allein die Sperrenmuster G1, G3 und G5 rund 1.950 Personenstunden pro Jahr, also etwa 1,2 Vollzeitäquivalente. Der Zahlungseingang folgt im Median 38 Tage nach der Faktura; jede Verkürzung der Zeitspanne bis zur Rechnungsstellung (G4) verkürzt die Forderungslaufzeit (DSO) unmittelbar um denselben Betrag.
+
