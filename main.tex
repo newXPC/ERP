@@ -48,6 +48,11 @@
 \clearpage
 \pagenumbering{arabic}
 
+% Tabellen-/Abbildungszaehler nach dem Frontmatter zuruecksetzen
+% (die longtable im Abkuerzungsverzeichnis erhoeht sonst den Tabellenzaehler)
+\setcounter{table}{0}
+\setcounter{figure}{0}
+
 \input{chapters/sec_01}
 \input{chapters/sec_02}
 \input{chapters/sec_03}
