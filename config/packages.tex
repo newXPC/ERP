@@ -1,0 +1,179 @@
+%TC:ignore
+% ============================================================
+%  packages.tex – Pakete und Layout-Konfiguration
+%  Orientiert am FOM Leitfaden IT/ING 2024
+% ============================================================
+
+% ── Sprache, Encoding, Schrift ────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}            % korrekte Anf\"uhrungszeichen (deutsch: „…")
+
+% Deutsche Bezeichnungen f\"ur \autoref
+\addto\extrasngerman{%
+  \renewcommand{\chapterautorefname}{Kapitel}%
+  \renewcommand{\sectionautorefname}{Abschnitt}%
+  \renewcommand{\subsectionautorefname}{Abschnitt}%
+  \renewcommand{\subsubsectionautorefname}{Abschnitt}%
+  \renewcommand{\figureautorefname}{Abbildung}%
+  \renewcommand{\tableautorefname}{Tabelle}%
+}
+
+% ── Schriftart: Arial-Ersatz (Helvetica) in 11pt ─────────────
+\usepackage[scaled]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% ── Seitenr\"ander nach Leitfaden \S5.2.1 ────────────────────
+\usepackage[
+  a4paper,
+  top=4cm,
+  bottom=2cm,
+  left=4cm,
+  right=2cm,
+  headsep=1.4cm,
+  headheight=17pt,
+  footskip=1.5cm,
+]{geometry}
+
+% ── Zeilenabstand / Absatz ────────────────────────────────────
+\usepackage{setspace}
+\onehalfspacing                  % 1,5-zeilig
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\usepackage{microtype}
+
+% ── Grafiken ──────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{float}
+
+% ── URLs ──────────────────────────────────────────────────────
+\usepackage{xurl}
+\urlstyle{same}
+
+% ── Tabellen ──────────────────────────────────────────────────
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{eurosym}
+
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+
+% ── Mathematik ────────────────────────────────────────────────
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ── Fortlaufende Nummerierung: 1, 2, 3 statt 2.1, 2.2 ────────
+\usepackage{chngcntr}
+\counterwithout{figure}{chapter}
+\renewcommand{\thefigure}{\arabic{figure}}
+\counterwithout{table}{chapter}
+\renewcommand{\thetable}{\arabic{table}}
+
+% ── "Abbildung 1 …" / "Tabelle 1 …" im Verzeichnis ──────────
+\newcommand*{\tocfigureformat}[1]{Abbildung~#1}
+\newcommand*{\toctableformat}[1]{Tabelle~#1}
+
+\DeclareTOCStyleEntry[
+  indent=0pt,
+  numwidth=2.4cm,
+  entrynumberformat=\tocfigureformat,
+]{tocline}{figure}
+
+\DeclareTOCStyleEntry[
+  indent=0pt,
+  numwidth=2.4cm,
+  entrynumberformat=\toctableformat,
+]{tocline}{table}
+
+% ── Kopf-/Fu\3zeile nach Leitfaden ───────────────────────────
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\automark[section]{chapter}
+\renewcommand*\chaptermarkformat{}
+\ihead{\leftmark}
+\ohead{\pagemark}
+\setheadsepline{0.4pt}
+\renewcommand*\chapterpagestyle{scrheadings}
+\setkomafont{pagehead}{\normalfont\normalsize}
+\setkomafont{pagination}{\normalfont\normalsize}
+
+% ── Kapitelstart ohne Extra-Abstand ──────────────────────────
+\makeatletter
+\renewcommand*{\chapterheadstartvskip}{\vspace*{0pt}}
+\makeatother
+
+% ── \"Uberschriften-Abst\"ande nach Leitfaden ────────────────
+\RedeclareSectionCommand[beforeskip=12pt, afterskip=6pt]{chapter}
+\RedeclareSectionCommand[beforeskip=12pt, afterskip=6pt]{section}
+\RedeclareSectionCommand[beforeskip=12pt, afterskip=6pt]{subsection}
+\RedeclareSectionCommand[beforeskip=12pt, afterskip=6pt]{subsubsection}
+
+% ── Abbildungen/Tabellen: Beschriftung ───────────────────────
+\usepackage[
+  font=small,
+  labelfont=bf,
+  format=plain,
+  justification=centering,
+  aboveskip=12pt,
+  belowskip=6pt
+]{caption}
+
+% ── Glossaries-extra (Abk\"urzungen) ─────────────────────────
+\usepackage[
+  acronym,
+  automake,
+  nopostdot,
+  nonumberlist,
+  toc,
+  section=chapter,
+  nogroupskip,
+]{glossaries-extra}
+\makeglossaries
+
+\setabbreviationstyle[acronym]{long-short}
+
+\newglossarystyle{abbrv-fom}{%
+  \renewenvironment{theglossary}%
+    {\begin{longtable}[l]{@{}p{2cm}@{\hspace{0.2cm}}p{\dimexpr\linewidth-2cm\relax}@{}}}%
+    {\end{longtable}}%
+  \renewcommand*{\glossaryheader}{}%
+  \renewcommand*{\glsgroupheading}[1]{}%
+  \renewcommand*{\glsgroupskip}{}%
+  \renewcommand*{\glossentry}[2]{%
+    \glstarget{##1}{\glossentryname{##1}} &
+    \glossentrydesc{##1}\tabularnewline
+  }%
+  \renewcommand*{\subglossentry}[3]{}%
+}
+
+% ============================================================
+%  LITERATURVERZEICHNIS – BibLaTeX (APA), FOM-Leitfaden
+% ============================================================
+\usepackage[
+  backend=biber,
+  style=apa,
+  autocite=inline,
+  maxcitenames=2,
+  maxbibnames=20,
+  giveninits=false,
+  uniquename=false,
+  uniquelist=false,
+  dashed=false,
+  sorting=anyt,
+  urldate=long,
+  dateabbrev=false,
+]{biblatex}
+
+\DeclareFieldFormat{pages}{S.~#1}
+\addbibresource{literature.bib}
+
+\DefineBibliographyStrings{ngerman}{%
+  nodate    = {o\adddot\space D\adddot},
+  retrieved = {Abgerufen\space am},
+  from      = {von},
+}
+%TC:endignore

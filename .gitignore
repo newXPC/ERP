@@ -13,3 +13,22 @@
 *.run.xml
 build*.log
 main.pdf
+# BibLaTeX / biber
+*.bcf
+*.bbl-SAVE-ERROR
+# glossaries
+*.glo
+*.gls
+*.glg
+*.acn
+*.acr
+*.alg
+*.ist
+*.xdy
+*.slo
+*.sls
+*.slg
+*.lofml
+# Testdateien
+_bibtest.*
+_fulltest.*

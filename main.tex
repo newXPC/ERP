@@ -1,55 +1,65 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[
+  a4paper,
+  oneside,
+  titlepage,
+  fontsize=11pt,
+  listof=totoc,        % Abbildungs-/Tabellenverzeichnis ins Inhaltsverzeichnis
+  bibliography=totoc   % Bibliographie ins Inhaltsverzeichnis
+]{scrreprt}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[ngerman]{babel}
-\usepackage{lmodern}
-\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2cm]{geometry}
-\usepackage{setspace}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{array}
-\usepackage{tabularx}
-\usepackage{longtable}
-\usepackage{ragged2e}
-\usepackage{caption}
-\usepackage{eurosym}
-\usepackage[hidelinks]{hyperref}
+% ── PDF-Metadaten / Links ─────────────────────────────────────
+\usepackage[
+  colorlinks=true,
+  breaklinks=true,
+  citecolor=black,
+  linkcolor=black,
+  menucolor=black,
+  urlcolor=black,
+]{hyperref}
 
-% text-wrapping X column, left-aligned
-\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+% ── Pakete und Konfiguration ──────────────────────────────────
+\input{config/packages}
+\input{config/glossary}
 
-\setstretch{1.5}
-\captionsetup{font=small,labelfont=bf}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.6em}
-
-% ---- Titelblatt-Platzhalter: hier einmal ausfüllen ----
-\newcommand{\standort}{[Standort]}
-\newcommand{\studiengang}{[Studiengang]}
-\newcommand{\matrikelnummer}{[Matrikelnummer]}
-
+\KOMAoptions{listof=totoc}
+% ============================================================
 \begin{document}
 
+% ── Titelseite ────────────────────────────────────────────────
 \input{titlepage}
-
+\thispagestyle{empty}
 \clearpage
+
+% ── Vorspann (römische Seitenzahlen) ─────────────────────────
+\pagestyle{scrheadings}
 \pagenumbering{Roman}
+\setcounter{page}{2}
+
+% Inhaltsverzeichnis
 \tableofcontents
 \clearpage
+
+% Abbildungsverzeichnis
 \listoffigures
+\clearpage
+
+% Tabellenverzeichnis
 \listoftables
 \clearpage
 
-\phantomsection\addcontentsline{toc}{section}{Abkürzungsverzeichnis}
-\section*{Abkürzungsverzeichnis}
-\input{abkuerzungsverzeichnis}
-
+% Abkürzungsverzeichnis
+\glsaddall
+\printglossary[
+  type=\acronymtype,
+  style=abbrv-fom,
+  title={Abkürzungsverzeichnis},
+  toctitle={Abkürzungsverzeichnis}
+]
 \clearpage
-\pagenumbering{arabic}
 
-% Tabellen-/Abbildungszaehler nach dem Frontmatter zuruecksetzen
-% (die longtable im Abkuerzungsverzeichnis erhoeht sonst den Tabellenzaehler)
+% ── Hauptteil (arabische Seitenzahlen) ───────────────────────
+\pagenumbering{arabic}
+\setcounter{page}{1}
 \setcounter{table}{0}
 \setcounter{figure}{0}
 
@@ -62,10 +72,14 @@
 \input{chapters/sec_07}
 \input{chapters/sec_08}
 
+% ── Nachspann ─────────────────────────────────────────────────
 \clearpage
 \input{anhang}
 
 \clearpage
-\input{literatur}
+\printbibliography[
+  heading=bibintoc,
+  title={Literatur}
+]
 
 \end{document}
