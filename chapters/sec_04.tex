@@ -1,30 +1,30 @@
-\chapter{Fit/Gap-Analyse}
+\chapter{Fit/Gap-Analyse}\label{ch:fitgap}
 
 
-\section{Vorgehen und Grundlagen des Process Mining}
+\section{Vorgehen und Grundlagen des Process Mining}\label{sec:vorgehen-grundlagen-pm}
 
-Eine klassische Fit/Gap-Analyse vergleicht die Unternehmensprozesse mit den im Standard vorgesehenen \gls{sap}-Prozessen und identifiziert Übereinstimmungen (Fits) und Lücken (Gaps). Diese Arbeit führt den Vergleich stattdessen datengetrieben durch. Der tatsächliche Prozessablauf wird per Process Mining aus dem Event-Log rekonstruiert (Discovery) und gegen den \gls{sap}-Referenzprozess aus Kapitel 3.1 abgeglichen (Conformance Checking), sodass Gaps gemessene statt vermutete Abweichungen sind.
+Eine klassische Fit/Gap-Analyse vergleicht die Unternehmensprozesse mit den im Standard vorgesehenen \gls{sap}-Prozessen und identifiziert Übereinstimmungen (Fits) und Lücken (Gaps). Diese Arbeit führt den Vergleich stattdessen datengetrieben durch. Der tatsächliche Prozessablauf wird per Process Mining aus dem Event-Log rekonstruiert (Discovery) und gegen den \gls{sap}-Referenzprozess aus Kapitel~\ref{sec:o2c-referenzprozess} abgeglichen (Conformance Checking), sodass Gaps gemessene statt vermutete Abweichungen sind.
 
-Process Mining extrahiert Wissen über reale Geschäftsprozesse aus Ereignisprotokollen, sogenannten Event-Logs \parencites[S.~3 ff.]{vanderaalst2016processmining}[S.~169 ff.]{vanderaalst2012manifesto}. Das Process Mining Manifesto unterscheidet drei Typen (Abbildung 3). Discovery erzeugt ohne Vorwissen ein Prozessmodell aus dem Event-Log, Conformance Checking vergleicht das Log mit einem Soll-Modell und lokalisiert Abweichungen, und Enhancement erweitert ein Modell etwa um Durchlaufzeiten und Engpässe \parencite[S.~176 f.]{vanderaalst2012manifesto}. Process Mining gehört damit zur beschreibenden und diagnostischen Analytik \parencite[Folie~458 und 470]{coletta2026_1407}.
+Process Mining extrahiert Wissen über reale Geschäftsprozesse aus Ereignisprotokollen, sogenannten Event-Logs \parencites[S.~3 ff.]{vanderaalst2016processmining}[S.~169 ff.]{vanderaalst2012manifesto}. Das Process Mining Manifesto unterscheidet drei Typen (Abbildung~\ref{fig:pm-drei-typen}). Discovery erzeugt ohne Vorwissen ein Prozessmodell aus dem Event-Log, Conformance Checking vergleicht das Log mit einem Soll-Modell und lokalisiert Abweichungen, und Enhancement erweitert ein Modell etwa um Durchlaufzeiten und Engpässe \parencite[S.~176 f.]{vanderaalst2012manifesto}. Process Mining gehört damit zur beschreibenden und diagnostischen Analytik \parencite[Folie~458 und 470]{coletta2026_1407}.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image3.png}
-\caption{Die drei Typen des Process Mining (Quelle: eigene Darstellung nach van der Aalst et al. (2012), S. 172 ff.)}
+\caption{Die drei Typen des Process Mining (Quelle: eigene Darstellung nach van der Aalst et al. (2012), S. 172 ff.)}\label{fig:pm-drei-typen}
 \end{figure}
 
 
-\section{Datenstrukturen vom \gls{sap}-Beleg zum Event-Log}
+\section{Datenstrukturen vom \gls{sap}-Beleg zum Event-Log}\label{sec:datenstrukturen}
 
-Die zentrale Datenstruktur des Process Mining ist das Event-Log, das aus Fällen (Cases) mit einer geordneten Folge von Ereignissen (Events) besteht. Jedes Ereignis trägt mindestens eine Case-ID, eine Aktivitätsbezeichnung und einen Zeitstempel, optional auch Ressource, Beträge oder Organisationseinheiten \parencite[S.~125 ff.]{vanderaalst2016processmining}. Demselben Aufbau folgen das \gls{sap}-eigene Prozessmodell für die Auftragsabwicklung \parencite[Abschnitt~3.3, S.~22--26]{sap2022samplecontent} und die \gls{o2c}-Fallstudie von Adolfsson/Saleh \parencite[S.~13]{adolfsson2026o2c}. Für den Austausch von Event-Logs hat sich das \gls{xml}-basierte \gls{xes}-Format als IEEE-Standard etabliert \parencite{ieee2016xes} und wird auch hier verwendet. Tabelle 3 zeigt einen vollständigen Fall aus dem Log mit den zugehörigen \gls{sap}-Datenquellen. Ein längerer Auszug findet sich in Anhang A1.
+Die zentrale Datenstruktur des Process Mining ist das Event-Log, das aus Fällen (Cases) mit einer geordneten Folge von Ereignissen (Events) besteht. Jedes Ereignis trägt mindestens eine Case-ID, eine Aktivitätsbezeichnung und einen Zeitstempel, optional auch Ressource, Beträge oder Organisationseinheiten \parencite[S.~125 ff.]{vanderaalst2016processmining}. Demselben Aufbau folgen das \gls{sap}-eigene Prozessmodell für die Auftragsabwicklung \parencite[Abschnitt~3.3, S.~22--26]{sap2022samplecontent} und die \gls{o2c}-Fallstudie von Adolfsson/Saleh \parencite[S.~13]{adolfsson2026o2c}. Für den Austausch von Event-Logs hat sich das \gls{xml}-basierte \gls{xes}-Format als IEEE-Standard etabliert \parencite{ieee2016xes} und wird auch hier verwendet. Tabelle~\ref{tab:fall-800012} zeigt einen vollständigen Fall aus dem Log mit den zugehörigen \gls{sap}-Datenquellen. Ein längerer Auszug findet sich in Anhang A1.
 
-Ein \gls{erp}-System führt kein natives Event-Log. Rekonstruiert wird es aus den Anlege-Zeitstempeln der Belegtabellen (\gls{vbak}, \gls{likp}, \gls{vbrk}, \gls{bkpf}), der Belegflusstabelle \gls{vbfa} sowie den Änderungsbelegen \gls{cdhdr}/\gls{cdpos} für Sperren, Preisänderungen und sonstige Eingriffe (Kapitel 3.2). Die Datenakquisition und -aufbereitung beansprucht dabei häufig 60 bis 80 Prozent der Projektzeit \parencites[Folie~414]{coletta2026_3006}[Folie~400 f.]{coletta2026_2306}.
+Ein \gls{erp}-System führt kein natives Event-Log. Rekonstruiert wird es aus den Anlege-Zeitstempeln der Belegtabellen (\gls{vbak}, \gls{likp}, \gls{vbrk}, \gls{bkpf}), der Belegflusstabelle \gls{vbfa} sowie den Änderungsbelegen \gls{cdhdr}/\gls{cdpos} für Sperren, Preisänderungen und sonstige Eingriffe (Kapitel~\ref{sec:stamm-bewegungsdaten-sap}). Die Datenakquisition und -aufbereitung beansprucht dabei häufig 60 bis 80 Prozent der Projektzeit \parencites[Folie~414]{coletta2026_3006}[Folie~400 f.]{coletta2026_2306}.
 
 Zwei Entwurfsentscheidungen prägen die Qualität des Logs. Erstens die Case-ID, hier die Kundenauftragsnummer (\gls{vbak}-\gls{vbeln}), da die Leitfragen auf die Auftragsabwicklung zielen. Das ist in der Literatur als Konvergenz- und Divergenzproblem bekannt, da ein Auftrag in mehrere Teillieferungen zerfallen und mehrere Aufträge in einer Sammelfaktura zusammenlaufen können, sodass die Zuordnung von Ereignissen zu einem Fall eine Vereinfachung ist \parencites[S.~3 ff.]{vanderaalst2019objectcentric}[S.~148 ff.]{vanderaalst2016processmining}. Zweitens die Datenqualität, Attribute aus verschiedenen Tabellen müssen harmonisiert werden \parencite[Folie~424 f.]{coletta2026_3006} und Zeitstempel liegen in unterschiedlicher Granularität vor, etwa das nur tagesgenaue Zahlungsausgleichsdatum \gls{augdt}. Nach dem \gls{gigo}-Prinzip entwerten unentdeckte Datenmängel die gesamte Analyse \parencites[Folie~314 ff.]{coletta2026_1905}[Folie~422 f.]{coletta2026_3006}[Folie~454]{coletta2026_1407}.
 
 \begin{table}[!htb]
 \centering
-\caption{Fall 800012 aus dem Event-Log mit den korrespondierenden \gls{sap}-Datenquellen}
+\caption{Fall 800012 aus dem Event-Log mit den korrespondierenden \gls{sap}-Datenquellen}\label{tab:fall-800012}
 \footnotesize
 \begin{tabularx}{\textwidth}{@{}l l l l Y@{}}
 \toprule
@@ -42,16 +42,16 @@ Zwei Entwurfsentscheidungen prägen die Qualität des Logs. Erstens die Case-ID,
 \end{tabularx}
 \end{table}
 
-\section{Algorithmen -- Discovery und Conformance Checking}
+\section{Algorithmen -- Discovery und Conformance Checking}\label{sec:algorithmen}
 
 Der Alpha-Algorithmus ist der klassische Discovery-Algorithmus und leitet aus dem Log Ordnungsrelationen zwischen Aktivitätspaaren ab, nämlich direkte Folge (a \textgreater{} b), Kausalität (a $\rightarrow$ b), Parallelität (a $\parallel$ b) und Unabhängigkeit (a \# b), verdichtet sie in einer Footprint-Matrix und konstruiert daraus ein Petri-Netz \parencites[S.~1128 ff.]{vanderaalst2004workflow}[S.~167 ff.]{vanderaalst2016processmining}. Für reale \gls{erp}-Daten ist er nur eingeschränkt geeignet, da er nicht zwischen häufigem und seltenem Verhalten unterscheidet (Rauschempfindlichkeit), kurze Schleifen strukturell nicht korrekt erkennt und ein vollständiges Log voraussetzt \parencite[S.~174 ff.\ und S.~190 ff.]{vanderaalst2016processmining}.
 
-Der Heuristics Miner adressiert diese Schwächen, indem er Häufigkeiten auswertet. Aus den Zählungen direkter Folgen berechnet er ein Abhängigkeitsmaß zwischen den Aktivitäten und nimmt nur Kanten oberhalb konfigurierbarer Schwellenwerte in den Abhängigkeitsgraphen auf, sodass seltenes Verhalten und Rauschen ausgeblendet und Schleifen korrekt behandelt werden \parencite[S.~151 ff.]{weijters2003rediscovering}. Der Inductive Miner zerlegt das Log rekursiv entlang dominanter Kontrollflussbeziehungen in einen Prozessbaum (Process Tree) und garantiert dadurch konstruktionsbedingt korrekte, „sound“ Modelle \parencite[S.~311 ff.]{leemans2013inductive}. Tabelle 4 vergleicht die drei Algorithmen konzeptionell, die Messergebnisse folgen in Kapitel 4.4.
+Der Heuristics Miner adressiert diese Schwächen, indem er Häufigkeiten auswertet. Aus den Zählungen direkter Folgen berechnet er ein Abhängigkeitsmaß zwischen den Aktivitäten und nimmt nur Kanten oberhalb konfigurierbarer Schwellenwerte in den Abhängigkeitsgraphen auf, sodass seltenes Verhalten und Rauschen ausgeblendet und Schleifen korrekt behandelt werden \parencite[S.~151 ff.]{weijters2003rediscovering}. Der Inductive Miner zerlegt das Log rekursiv entlang dominanter Kontrollflussbeziehungen in einen Prozessbaum (Process Tree) und garantiert dadurch konstruktionsbedingt korrekte, „sound“ Modelle \parencite[S.~311 ff.]{leemans2013inductive}. Tabelle~\ref{tab:vergleich-algorithmen} vergleicht die drei Algorithmen konzeptionell, die Messergebnisse folgen in Kapitel~\ref{sec:durchfuehrung-analyse}.
 
 Für den Soll-Ist-Abgleich stellt Conformance Checking Verfahren bereit, mit denen sich ein Event-Log gegen ein Modell „abspielen“ lässt. Beim Token-Replay wird jeder Fall im Soll-Petri-Netz nachvollzogen, und aus fehlenden und übrig bleibenden Tokens ergibt sich die Fitness als Maß für den erklärten Anteil des beobachteten Verhaltens \parencite[S.~64 ff.]{rozinat2008conformance}. Aussagekräftiger, aber rechenintensiver sind Alignments, die jede Log-Spur auf den kostengünstigsten Pfad durch das Modell abbilden und auch nicht vorgesehene Ereignisse bestrafen. Daneben werden die Qualitätsdimensionen Precision, Generalization und Simplicity unterschieden \parencite[S.~188 ff.\ und S.~243 ff.]{vanderaalst2016processmining}. Alle Verfahren stehen quelloffen in \gls{pm4py} (Version 2.7) zur Verfügung \parencites{berti2019pm4py}[S.~21 ff.]{peters2019processmining}[S.~3 ff.]{reinkemeyer2020processmining}.
 \begin{table}[!htb]
 \centering
-\caption{Vergleich zentraler Discovery-Algorithmen}
+\caption{Vergleich zentraler Discovery-Algorithmen}\label{tab:vergleich-algorithmen}
 \small
 \begin{tabularx}{\textwidth}{@{}l Y Y Y@{}}
 \toprule
@@ -68,21 +68,21 @@ Eignung für \gls{erp}-Logs & gering (nur Lehrbeispiele) & hoch (Praxisstandard,
 \end{table}
 
 
-\section{Durchführung der Analyse (Theorie-Praxis-Transfer)}
+\section{Durchführung der Analyse (Theorie-Praxis-Transfer)}\label{sec:durchfuehrung-analyse}
 
-Die Analyse folgt der Kette Generierung $\rightarrow$ Deskription $\rightarrow$ Discovery $\rightarrow$ Conformance. Der Log (12.000 Fälle, 84.121 Events, elf Aktivitäten) enthält 85 unterschiedliche Prozessvarianten. Die häufigste Variante, der störungsfreie Soll-Pfad („Happy Path“), deckt nur 38,9 Prozent der Fälle ab, die zehn häufigsten Varianten zusammen 89,2 Prozent (Abbildung 4). Auch in realen \gls{erp}-Analysen folgt nur eine Minderheit der Fälle dem gedachten Standardablauf, der Rest verteilt sich auf einen langen Schwanz von Abweichungsvarianten \parencites[S.~125 ff.]{vanderaalst2016processmining}[S.~3 ff.]{reinkemeyer2020processmining}. Die Fallstudie von Adolfsson/Saleh etwa fand 2.563 Varianten bei 6.740 Fällen, von denen nur 365 vollständig konform zum Referenzmodell verliefen \parencite[S.~44 ff.]{adolfsson2026o2c}.
+Die Analyse folgt der Kette Generierung $\rightarrow$ Deskription $\rightarrow$ Discovery $\rightarrow$ Conformance. Der Log (12.000 Fälle, 84.121 Events, elf Aktivitäten) enthält 85 unterschiedliche Prozessvarianten. Die häufigste Variante, der störungsfreie Soll-Pfad („Happy Path“), deckt nur 38,9 Prozent der Fälle ab, die zehn häufigsten Varianten zusammen 89,2 Prozent (Abbildung~\ref{fig:variantenabdeckung}). Auch in realen \gls{erp}-Analysen folgt nur eine Minderheit der Fälle dem gedachten Standardablauf, der Rest verteilt sich auf einen langen Schwanz von Abweichungsvarianten \parencites[S.~125 ff.]{vanderaalst2016processmining}[S.~3 ff.]{reinkemeyer2020processmining}. Die Fallstudie von Adolfsson/Saleh etwa fand 2.563 Varianten bei 6.740 Fällen, von denen nur 365 vollständig konform zum Referenzmodell verliefen \parencite[S.~44 ff.]{adolfsson2026o2c}.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image4.png}
-\caption{Kumulierte Variantenabdeckung des \gls{o2c}-Logs (Quelle: eigene Auswertung mit PM4Py)}
+\caption{Kumulierte Variantenabdeckung des \gls{o2c}-Logs (Quelle: eigene Auswertung mit PM4Py)}\label{fig:variantenabdeckung}
 \end{figure}
 
-Tabelle 5 fasst die Messergebnisse der drei Discovery-Algorithmen auf demselben Log zusammen. Der Alpha-Algorithmus scheitert erwartungsgemäß. Sein Petri-Netz (11 Transitionen, 15 Stellen, 33 Kanten) erreicht eine Token-Replay-Fitness von nur 0,646, und keine einzige Fallspur lässt sich vollständig abspielen. Die Schleifen (mehrfache Auftragsänderungen, Nachlieferungen) und das nebenläufige Störungsverhalten überfordern das Verfahren. Der Heuristics Miner (Abhängigkeitsschwelle 0,9) erreicht Fitness 0,972 bei 67,7 Prozent vollständig replayfähiger Fälle. Der Inductive Miner mit Rauschfilter 0,2 liefert mit Fitness 0,996, 95,0 Prozent replayfähigen Fällen und einer Precision von 0,913 das beste Modell. Es erklärt fast das gesamte beobachtete Verhalten, ohne wesentlich mehr zuzulassen, als beobachtet wurde.
+Tabelle~\ref{tab:messergebnisse-discovery} fasst die Messergebnisse der drei Discovery-Algorithmen auf demselben Log zusammen. Der Alpha-Algorithmus scheitert erwartungsgemäß. Sein Petri-Netz (11 Transitionen, 15 Stellen, 33 Kanten) erreicht eine Token-Replay-Fitness von nur 0,646, und keine einzige Fallspur lässt sich vollständig abspielen. Die Schleifen (mehrfache Auftragsänderungen, Nachlieferungen) und das nebenläufige Störungsverhalten überfordern das Verfahren. Der Heuristics Miner (Abhängigkeitsschwelle 0,9) erreicht Fitness 0,972 bei 67,7 Prozent vollständig replayfähiger Fälle. Der Inductive Miner mit Rauschfilter 0,2 liefert mit Fitness 0,996, 95,0 Prozent replayfähigen Fällen und einer Precision von 0,913 das beste Modell. Es erklärt fast das gesamte beobachtete Verhalten, ohne wesentlich mehr zuzulassen, als beobachtet wurde.
 
 \begin{table}[!htb]
 \centering
-\caption{Messergebnisse der Discovery-Algorithmen auf dem \gls{o2c}-Log (PM4Py, Token-Replay)}
+\caption{Messergebnisse der Discovery-Algorithmen auf dem \gls{o2c}-Log (PM4Py, Token-Replay)}\label{tab:messergebnisse-discovery}
 \small
 \begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{3.4cm} >{\RaggedRight\arraybackslash}p{3.0cm} c c c@{}}
 \toprule
@@ -95,28 +95,28 @@ Inductive Miner (Rauschfilter 0,2) & 19 /\allowbreak{} 14 /\allowbreak{} 38 & 0,
 \end{tabular}
 \end{table}
 
-Abbildung 5 zeigt das aus dem Log rekonstruierte Prozessmodell als \gls{dfg} mit Ereignis- und Kantenhäufigkeiten. Alle sechs injizierten Störungsmuster sind ohne Vorwissen aus den Daten sichtbar geworden, der Kreditsperren-Umweg (4.086 Fälle), die Änderungsschleife (3.752 Änderungsereignisse in 2.725 Fällen, 814 Fälle wurden mehrfach geändert, sichtbar als 1.027 direkte Wiederholungskanten), die Liefersperren (1.470), die Fakturasperren (944) sowie die Gutschriften (532) mit Nachlieferungen (471). Die Enhancement-Perspektive ergänzt die Zeitdimension (Abbildung 6). Die größten Liegezeiten entstehen vor der Lieferbelegerstellung bei Liefersperren (Median 3,9 Arbeitstage gegenüber 0,8 ohne Sperre), zwischen Warenausgang und Faktura (2,6 Arbeitstage, der Wochen-Batch) und vor der manuellen Kreditfreigabe (1,9 Arbeitstage).
+Abbildung~\ref{fig:ist-modell-dfg} zeigt das aus dem Log rekonstruierte Prozessmodell als \gls{dfg} mit Ereignis- und Kantenhäufigkeiten. Alle sechs injizierten Störungsmuster sind ohne Vorwissen aus den Daten sichtbar geworden, der Kreditsperren-Umweg (4.086 Fälle), die Änderungsschleife (3.752 Änderungsereignisse in 2.725 Fällen, 814 Fälle wurden mehrfach geändert, sichtbar als 1.027 direkte Wiederholungskanten), die Liefersperren (1.470), die Fakturasperren (944) sowie die Gutschriften (532) mit Nachlieferungen (471). Die Enhancement-Perspektive ergänzt die Zeitdimension (Abbildung~\ref{fig:liegezeiten}). Die größten Liegezeiten entstehen vor der Lieferbelegerstellung bei Liefersperren (Median 3,9 Arbeitstage gegenüber 0,8 ohne Sperre), zwischen Warenausgang und Faktura (2,6 Arbeitstage, der Wochen-Batch) und vor der manuellen Kreditfreigabe (1,9 Arbeitstage).
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image5.png}
-\caption{Aus dem Event-Log rekonstruiertes Ist-Modell des \gls{o2c}-Prozesses (Quelle: eigene Auswertung mit PM4Py)}
+\caption{Aus dem Event-Log rekonstruiertes Ist-Modell des \gls{o2c}-Prozesses (Quelle: eigene Auswertung mit PM4Py)}\label{fig:ist-modell-dfg}
 \end{figure}
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image6.png}
-\caption{Median-Liegezeiten je Prozessübergang (Quelle: eigene Auswertung mit PM4Py)}
+\caption{Median-Liegezeiten je Prozessübergang (Quelle: eigene Auswertung mit PM4Py)}\label{fig:liegezeiten}
 \end{figure}
 
 
-\section{Identifizierte Gaps und ihre Auswirkungen}
+\section{Identifizierte Gaps und ihre Auswirkungen}\label{sec:gaps-auswirkungen}
 
-Für den formalen Soll-Ist-Abgleich wurde der \gls{sap}-Referenzprozess aus Kapitel 3.1 als sequenzielles Soll-Modell hinterlegt und der Log per Alignments dagegen abgeglichen. Nur 38,9 Prozent der Fälle sind vollständig konform, die Alignment-Fitness des Gesamtlogs beträgt 0,921. Einfaches Token-Replay wies für dasselbe Soll-Modell dagegen eine scheinbare Fitness von 0,994 aus, weil es Log-Ereignisse ignoriert, für die das Modell keine Transition kennt, und ist für Soll-Modelle mit bewusst engem Aktivitätsumfang ungeeignet. Tabelle 6 stellt die sechs Gaps der injizierten Grundwahrheit gegenüber. Alle Muster wurden wiedergefunden, die gemessenen Häufigkeiten entsprechen im Rahmen der statistischen Erwartung den injizierten Parametern. Die Methodenvalidierung ist damit gelungen.\glsadd{at}\glsadd{wa}
+Für den formalen Soll-Ist-Abgleich wurde der \gls{sap}-Referenzprozess aus Kapitel~\ref{sec:o2c-referenzprozess} als sequenzielles Soll-Modell hinterlegt und der Log per Alignments dagegen abgeglichen. Nur 38,9 Prozent der Fälle sind vollständig konform, die Alignment-Fitness des Gesamtlogs beträgt 0,921. Einfaches Token-Replay wies für dasselbe Soll-Modell dagegen eine scheinbare Fitness von 0,994 aus, weil es Log-Ereignisse ignoriert, für die das Modell keine Transition kennt, und ist für Soll-Modelle mit bewusst engem Aktivitätsumfang ungeeignet. Tabelle~\ref{tab:ergebnis-fitgap} stellt die sechs Gaps der injizierten Grundwahrheit gegenüber. Alle Muster wurden wiedergefunden, die gemessenen Häufigkeiten entsprechen im Rahmen der statistischen Erwartung den injizierten Parametern. Die Methodenvalidierung ist damit gelungen.\glsadd{at}\glsadd{wa}
 
 \begin{table}[!htb]
 \centering
-\caption{Ergebnis der Fit/Gap-Analyse: gemessene Gaps und Vergleich mit der Grundwahrheit}
+\caption{Ergebnis der Fit/Gap-Analyse: gemessene Gaps und Vergleich mit der Grundwahrheit}\label{tab:ergebnis-fitgap}
 \small
 \begin{tabularx}{\textwidth}{@{}>{\RaggedRight\arraybackslash}p{3.0cm} >{\RaggedRight\arraybackslash}p{4.6cm} >{\RaggedRight\arraybackslash}p{2.6cm} >{\RaggedRight\arraybackslash}p{4.0cm}@{}}
 \toprule
@@ -132,5 +132,5 @@ G6 Gutschrift/\allowbreak{}Nachlieferung & 532 /\allowbreak{} 471 Fälle (4,4 \%
 \end{tabularx}
 \end{table}
 
-Die betriebswirtschaftliche Wirkung lässt sich aus dem Log quantifizieren. Die Durchlaufzeit vom Auftragseingang bis zur Faktura liegt im Median bei 5,8 Arbeitstagen, in den störungsfreien Fällen bei 4,7. Die Störungsmuster kosten also im Median rund einen Arbeitstag, in den betroffenen Fällen deutlich mehr (Abbildung 6). Unterstellt man für die manuellen Eingriffe Bearbeitungszeiten von 15 Minuten je Kreditfreigabe, 25 Minuten je Liefersperren-Klärung und 20 Minuten je Fakturasperre (bewusst vereinfachende Setzung), binden allein die Sperrenmuster G1, G3 und G5 rund 1.950 Personenstunden pro Jahr (ca. 1,2 \gls{vzae}). Der Zahlungseingang folgt im Median 38 Tage nach der Faktura, jede Verkürzung der Zeitspanne bis zur Rechnungsstellung (G4) verkürzt die \gls{dso} unmittelbar um denselben Betrag.
+Die betriebswirtschaftliche Wirkung lässt sich aus dem Log quantifizieren. Die Durchlaufzeit vom Auftragseingang bis zur Faktura liegt im Median bei 5,8 Arbeitstagen, in den störungsfreien Fällen bei 4,7. Die Störungsmuster kosten also im Median rund einen Arbeitstag, in den betroffenen Fällen deutlich mehr (Abbildung~\ref{fig:liegezeiten}). Unterstellt man für die manuellen Eingriffe Bearbeitungszeiten von 15 Minuten je Kreditfreigabe, 25 Minuten je Liefersperren-Klärung und 20 Minuten je Fakturasperre (bewusst vereinfachende Setzung), binden allein die Sperrenmuster G1, G3 und G5 rund 1.950 Personenstunden pro Jahr (ca. 1,2 \gls{vzae}). Der Zahlungseingang folgt im Median 38 Tage nach der Faktura, jede Verkürzung der Zeitspanne bis zur Rechnungsstellung (G4) verkürzt die \gls{dso} unmittelbar um denselben Betrag.
 

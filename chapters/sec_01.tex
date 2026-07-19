@@ -1,19 +1,19 @@
-\chapter{Einführung}
+\chapter{Einführung}\label{ch:einfuehrung}
 
 
-\section{Auswahl des spezifischen Prozesses innerhalb des \gls{sap}-Moduls}
+\section{Auswahl des spezifischen Prozesses innerhalb des \gls{sap}-Moduls}\label{sec:prozessauswahl}
 
 \gls{erp}-Systeme sind das zentrale Anwendungssystem für den betrieblichen Alltag. Sie umfassen nach Gronau „die Verwaltung aller zur Durchführung von Geschäftsprozessen notwendigen Informationen über die Ressourcen Material, Personal, Kapazitäten [\dots{}], Finanzen und Informationen“ und setzen dafür eine gemeinsame Datenhaltung voraus \parencite[S.4]{gronau2014erp}. Auf der operativen Ebene führen sie die täglichen Routinetransaktionen des Geschäftsbetriebs aus und zeichnen diese auf \parencite[Folie~33]{coletta2026_0303}. Jeder Beleg, jede Buchung und jede Änderung hinterlässt dabei in der zentralen Datenbank eine digitale Spur mit Zeitstempel. Process Mining macht diese Spuren nutzbar und analysiert Geschäftsprozesse nicht so, wie sie dokumentiert sind, sondern so, wie sie tatsächlich ablaufen\parencites[S.~169 f.]{vanderaalst2012manifesto}[S.~13]{adolfsson2026o2c}.
 
 Untersuchungsgegenstand ist der \gls{o2c} im Vertriebsmodul \gls{sd} von \gls{sap} \gls{s/4hana}. Er umfasst die Prozesskette von der Auftragsaufnahme über Verfügbarkeitsprüfung, Kommissionierung und Versand bis zur Fakturierung und zum Zahlungseingang \parencite{SAP_Verkaufsanalyse} und verläuft als erlöswirksamer End-to-End-Prozess abteilungsübergreifend durch Vertrieb, Lager und Finanzbuchhaltung \parencite[Folie~63]{coletta2026_0303}. Sein hohes Belegvolumen, die unmittelbare Wirkung auf Kundenzufriedenheit und Liquidität sowie die vollständige Abbildung im \gls{erp}-System eignen ihn gut für eine Process-Mining-Analyse.
 
-\section{Begründung der Wahl basierend auf beruflicher Praxis}
+\section{Begründung der Wahl basierend auf beruflicher Praxis}\label{sec:praxisbegruendung}
 
 In der beruflichen Praxis der Auftragsabwicklung zeigen sich regelmäßig die typischen Symptome ineffizienter \gls{o2c}-Prozesse: Aufträge, die in Kredit- oder Liefersperren hängen bleiben, Klärungsschleifen zwischen Vertrieb und Versand nach Auftragsänderungen sowie Rechnungen, die das Haus erst Tage nach dem Warenausgang verlassen. Auch die Fachliteratur zu \gls{sap} \gls{sd} benennt manuelle Dateneingabe, fragmentierte Informationssysteme und verzögerte Auftragsabwicklung als wiederkehrende Schwachstellen \parencite[S.~109 f.]{nadukuru2024o2c}. Versuche, solche Ursachen in Prozessworkshops zu erheben, bleiben erfahrungsgemäß unbefriedigend, weil die Beteiligten denselben Prozess unterschiedlich beschreiben und Geschäftsprozesse häufig „zu komplex oder nicht klar dokumentiert“ sind \parencite[Folie~246]{coletta2026_0505}. Process Mining stützt die Analyse stattdessen auf Daten. Die Ergebnisse sind Evidenzen, das heißt „aus Daten gewonnene und damit intersubjektiv nachvollziehbare Einsichten in einen Sachverhalt“ \parencite[Folie~447]{coletta2026_1407}.
 
-Bewusst wird kein reales Unternehmen untersucht, sondern ein offen dokumentierter Datensatz. Die Datenstrukturen und Algorithmen des Process Mining lassen sich an einem reproduzierbaren Event-Log präziser untersuchen als an vertraulichen Unternehmensdaten, deren Freigabe zudem datenschutzrechtliche und arbeitsrechtliche Fragen aufwerfen würde. Die Datengrundlage wird in Kapitel 2.2 eingeordnet und begründet.
+Bewusst wird kein reales Unternehmen untersucht, sondern ein offen dokumentierter Datensatz. Die Datenstrukturen und Algorithmen des Process Mining lassen sich an einem reproduzierbaren Event-Log präziser untersuchen als an vertraulichen Unternehmensdaten, deren Freigabe zudem datenschutzrechtliche und arbeitsrechtliche Fragen aufwerfen würde. Die Datengrundlage wird in Kapitel~\ref{sec:datengrundlage} eingeordnet und begründet.
 
-\section{Zielsetzung der Projektarbeit}
+\section{Zielsetzung der Projektarbeit}\label{sec:zielsetzung}
 
 Ziel der Arbeit ist es, zu untersuchen, wie Prozessineffizienzen in \gls{erp}-Systemen mittels Process Mining identifiziert werden können. Dazu werden drei Leitfragen verfolgt: 
 \begin{enumerate}
@@ -23,4 +23,4 @@ Ziel der Arbeit ist es, zu untersuchen, wie Prozessineffizienzen in \gls{erp}-Sy
 \end{enumerate}
 Da der verwendete Log synthetisch erzeugt wird, die injizierten Störungsmuster also vorab bekannt sind, dient die Analyse zugleich als Methodenvalidierung. Ein taugliches Analyseverfahren muss die bekannte Grundwahrheit aus den Daten zurückgewinnen.
 
-Kapitel 2 beschreibt den untersuchten Prozess und die Datengrundlage, Kapitel 3 den \gls{sap}-Referenzprozess mit seinen Datenstrukturen und Modulschnittstellen. Kapitel 4 bildet als Theorie-Praxis-Transfer den Kern der Arbeit und wendet Grundlagen, Datenstrukturen und Algorithmen des Process Mining als datengetriebene Fit/Gap-Analyse auf den erzeugten Event-Log an. Die Kapitel 5 bis 7 leiten Anpassungen, eine Implementierungsstrategie und Lessons Learned ab, Kapitel 8 fasst die Ergebnisse zusammen.
+Kapitel~\ref{ch:prozessbeschreibung} beschreibt den untersuchten Prozess und die Datengrundlage, Kapitel~\ref{ch:sap-prozessanalyse} den \gls{sap}-Referenzprozess mit seinen Datenstrukturen und Modulschnittstellen. Kapitel~\ref{ch:fitgap} bildet als Theorie-Praxis-Transfer den Kern der Arbeit und wendet Grundlagen, Datenstrukturen und Algorithmen des Process Mining als datengetriebene Fit/Gap-Analyse auf den erzeugten Event-Log an. Die Kapitel~\ref{ch:anpassung} bis~\ref{ch:lessons} leiten Anpassungen, eine Implementierungsstrategie und Lessons Learned ab, Kapitel~\ref{ch:zusammenfassung} fasst die Ergebnisse zusammen.
