@@ -58,6 +58,18 @@
 \setcounter{topnumber}{3}
 \setcounter{bottomnumber}{2}
 \setcounter{totalnumber}{4}
+
+% Float-Seiten: Inhalt oben ausrichten statt vertikal zu zentrieren
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+
+% Hurenkinder-/Schusterjungen-Schutz: keine einzelnen Zeilen eines
+% Absatzes allein am Seitenanfang oder -ende
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
 % ── URLs ──────────────────────────────────────────────────────
 \usepackage{xurl}
 \urlstyle{same}
