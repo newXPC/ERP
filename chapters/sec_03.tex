@@ -27,10 +27,10 @@ Die Bewegungsdaten liegen in relationalen Tabellenpaaren aus Kopf- und Positions
 \toprule
 \textbf{Beleg /\allowbreak{} Objekt} & \textbf{Kopf-/\allowbreak{}Positionstabelle} & \textbf{Für Process Mining relevante Felder} \\
 \midrule
-Kundenauftrag & \gls{vbak} /\allowbreak{} \gls{vbap} & VBELN, POSNR, ERDAT/\allowbreak{}\gls{erzet}/\allowbreak{}\gls{ernam}, AUART, NETWR, LIFSK (Liefersperre), CMGST (Kreditstatus) \\
-Auslieferung & \gls{likp} /\allowbreak{} \gls{lips} & VBELN, \gls{erdat}/\allowbreak{}\gls{erzet}, LFDAT (Lieferdatum), WADAT\_IST (tatsächl. Warenausgang) \\
-Faktura & \gls{vbrk} /\allowbreak{} \gls{vbrp} & VBELN, \gls{erdat}/\allowbreak{}\gls{erzet}, FKDAT, FKSTO (Storno), NETWR \\
-Buchhaltungsbeleg & \gls{bkpf} /\allowbreak{} \gls{bseg} (ACDOCA) & BELNR, BUDAT, AUGDT (Ausgleichs-/\allowbreak{}Zahlungsdatum) \\
+Kundenauftrag & \gls{vbak} /\allowbreak{} \gls{vbap} & VBELN, POSNR, \gls{erdat}/\allowbreak{}\gls{erzet}/\allowbreak{}\gls{ernam}, AUART, NETWR, \gls{lifsk}, \gls{cmgst} \\
+Auslieferung & \gls{likp} /\allowbreak{} \gls{lips} & VBELN, \gls{erdat}/\allowbreak{}\gls{erzet}, \gls{lfdat}, WADAT\_IST (tatsächl. Warenausgang) \\
+Faktura & \gls{vbrk} /\allowbreak{} \gls{vbrp} & VBELN, \gls{erdat}/\allowbreak{}\gls{erzet}, FKDAT, \gls{fksto}, NETWR \\
+Buchhaltungsbeleg & \gls{bkpf} /\allowbreak{} \gls{bseg} (ACDOCA) & BELNR, BUDAT, \gls{augdt} \\
 Belegfluss & \gls{vbfa} & VBELV/\allowbreak{}POSNV $\rightarrow$ VBELN/\allowbreak{}POSNN, VBTYP\_N, \gls{erdat}/\allowbreak{}\gls{erzet} \\
 Änderungsbelege & \gls{cdhdr} /\allowbreak{} \gls{cdpos} & OBJECTCLAS (z. B. VERKBELEG), UDATE/\allowbreak{}UTIME, USERNAME, TABNAME, FNAME, Alt-/\allowbreak{}Neuwert \\
 \bottomrule
