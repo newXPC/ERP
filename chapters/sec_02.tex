@@ -18,10 +18,14 @@ Wer Process-Mining-Methoden untersuchen will, ohne auf vertrauliche Unternehmens
 
 Die Arbeit nutzt daher die zweite Option: einen synthetischen SAP-O2C-Event-Log, der mit einem Python-Simulationsskript erzeugt und mit der Open-Source-Bibliothek PM4Py verarbeitet wird \parencite[zu PM4Py]{berti2019pm4py}. Simuliert werden 12.000 Kundenaufträge eines Geschäftsjahres (01.07.2025 bis 30.06.2026) entlang des SAP-Belegflusses aus Kapitel 3; die sechs Störungsmuster aus Abbildung 1 werden mit festen Wahrscheinlichkeiten und Verzögerungsverteilungen injiziert (vollständige Parameter in Anhang A2). Der resultierende Log umfasst 84.121 Ereignisse zu elf Aktivitätstypen und wird sowohl als CSV-Tabelle als auch im XES-Format exportiert. Das Vorgehen ist vollständig reproduzierbar (fester Zufalls-Seed 42: jeder Lauf erzeugt denselben Log), erfordert keine Firmenfreigabe und wirft keine Datenschutzfragen auf, weil alle Benutzerkennungen synthetisch sind. Damit weicht die Arbeit bewusst von dem in der Aufgabenstellung skizzierten Konstrukt eines fiktionalen Unternehmens ab: An die Stelle frei erfundener, nicht nachprüfbarer Unternehmenszahlen tritt ein offengelegter, reproduzierbarer Datensatz; die vorgegebene Kapitelstruktur bleibt davon unberührt. Der Preis dafür ist eine bewusste Einschränkung: Der Log zeigt modelliertes, kein real gewachsenes Verhalten, worauf in Kapitel 8 zurückzukommen ist.
 
+\newpage
 
 \section{Analyse der involvierten Stammdaten und Bewegungsdaten}
 
 Die Daten eines Anwendungssystems lassen sich in Stammdaten, Bewegungsdaten und Organisationsdaten unterteilen \parencite[Folie~16]{coletta2026_0303}. Stammdaten sind langlebige, zustandsorientierte Daten, die über viele Geschäftsvorfälle hinweg unverändert genutzt werden; Bewegungsdaten entstehen dagegen vorgangsbezogen mit jedem einzelnen Geschäftsvorfall \parencites[Folie~322]{coletta2026_0206}[S.~165 ff.]{gronau2014erp}. Tabelle 1 ordnet die im O2C-Prozess involvierten Daten dieser Klassifikation zu.
+
+
+Bereits diese fachliche Bestandsaufnahme zeigt, wo Prozess- und Datenqualität zusammenhängen: Dubletten im Kundenstamm, ungepflegte Versanddaten oder Sonderpreise, die statt im Konditionsstamm direkt im Auftrag gepflegt werden, erzeugen die Sperren- und Klärungsmuster K2, K3 und K5. Geringe Datenqualität schlägt zudem nach dem GiGo-Prinzip („Garbage in, Garbage out“) unmittelbar auf jede datengetriebene Auswertung durch \parencite[Folie~314 ff.]{coletta2026_1905}.
 
 \begin{table}[htbp]
 \centering
@@ -37,6 +41,3 @@ Organisationsdaten & Verkaufsorganisation, Vertriebsweg, Sparte, Werk, Versandst
 \bottomrule
 \end{tabularx}
 \end{table}
-
-Bereits diese fachliche Bestandsaufnahme zeigt, wo Prozess- und Datenqualität zusammenhängen: Dubletten im Kundenstamm, ungepflegte Versanddaten oder Sonderpreise, die statt im Konditionsstamm direkt im Auftrag gepflegt werden, erzeugen die Sperren- und Klärungsmuster K2, K3 und K5. Geringe Datenqualität schlägt zudem nach dem GiGo-Prinzip („Garbage in, Garbage out“) unmittelbar auf jede datengetriebene Auswertung durch \parencite[Folie~314 ff.]{coletta2026_1905}.
-
