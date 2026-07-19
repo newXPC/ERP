@@ -46,8 +46,18 @@
 
 % ── Grafiken ──────────────────────────────────────────────────
 \usepackage{graphicx}
-\usepackage{float}
+% Floats duerfen nicht ueber Abschnittsgrenzen hinweg abdriften
+\usepackage[section]{placeins}
 
+% Grosszuegigere Float-Platzierung: Bilder/Tabellen bleiben im Fliesstext
+% statt auf eine eigene Float-Seite verbannt zu werden
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.7}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.66}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
 % ── URLs ──────────────────────────────────────────────────────
 \usepackage{xurl}
 \urlstyle{same}

@@ -1,6 +1,7 @@
 \documentclass[
   a4paper,
   oneside,
+  open=any,
   titlepage,
   fontsize=11pt,
   listof=totoc,        % Abbildungs-/Tabellenverzeichnis ins Inhaltsverzeichnis
@@ -48,7 +49,6 @@
 \clearpage
 
 % Abkürzungsverzeichnis
-\glsaddall
 \printglossary[
   type=\acronymtype,
   style=abbrv-fom,
@@ -58,6 +58,7 @@
 \clearpage
 
 % ── Hauptteil (arabische Seitenzahlen) ───────────────────────
+\clearpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \setcounter{table}{0}
