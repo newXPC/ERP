@@ -2,8 +2,8 @@
 \chapter*{Anhang}
 
 
-\section*{A1 Auszug aus dem Event-Log}
-\addcontentsline{toc}{section}{A1 Auszug aus dem Event-Log}
+\section*{Anhang I: Auszug aus dem Event-Log}
+\addcontentsline{toc}{section}{Anhang I: Auszug aus dem Event-Log}
 
 Der folgende Auszug zeigt zwei repräsentative Fälle aus dem synthetischen Log: einen Happy-Path-Fall (800002) und einen Fall mit Liefersperre, Falschlieferung, Gutschrift und Nachlieferung (800347). Ein Fall mit Kreditsperre und Auftragsänderung ist in Tabelle~\ref{tab:fall-800012} dargestellt. Alle Ressourcenkennungen sind synthetisch.
 
@@ -33,8 +33,8 @@ Der folgende Auszug zeigt zwei repräsentative Fälle aus dem synthetischen Log:
 \end{longtable}}
 
 
-\section*{A2 Parameter des Simulationsmodells (Reproduzierbarkeit)}
-\addcontentsline{toc}{section}{A2 Parameter des Simulationsmodells (Reproduzierbarkeit)}
+\section*{Anhang II: Parameter des Simulationsmodells (Reproduzierbarkeit)}
+\addcontentsline{toc}{section}{Anhang II: Parameter des Simulationsmodells (Reproduzierbarkeit)}
 
 Der Log wurde mit einem Python-Skript erzeugt (Zufallsgenerator-Seed 42, PM4Py-Version 2.7, Simulationszeitraum 01.07.2025 bis 30.06.2026, 12.000 Fälle, 84.121 Ereignisse, 11 Aktivitätstypen, Export als CSV und XES). Liegezeiten werden als Lognormalverteilungen über Arbeitstage modelliert (Wochenenden übersprungen), die Fakturierung erfolgt im wöchentlichen Sammellauf (montags 03:10 Uhr), das Zahlungsdatum ist tagesgenau modelliert (analog BSEG-AUGDT).
 
@@ -57,8 +57,8 @@ Zahlungsziel-Verhalten & -- & 38 Tage (lognormal) & Median 38 Tage Faktura $\rig
 \end{table}
 
 
-\section*{A3 Kennzahlen des Prozessmonitorings}
-\addcontentsline{toc}{section}{A3 Kennzahlen des Prozessmonitorings}
+\section*{Anhang III: Kennzahlen des Prozessmonitorings}
+\addcontentsline{toc}{section}{Anhang III: Kennzahlen des Prozessmonitorings}
 
 \begin{table}[!htb]
 \centering
@@ -78,4 +78,38 @@ Anzahl Prozessvarianten & 85 & \textless{} 40 & alle Maßnahmen \\
 \bottomrule
 \end{tabularx}
 \end{table}
+\clearpage
 
+\section*{Anhang IV: Zusammenfassung der genutzten Prompts}
+\addcontentsline{toc}{section}{Anhang IV: Zusammenfassung der genutzten Prompts}
+
+Gemäß Leitfaden werden die für KI-gestützte Arbeitsschritte verwendeten Prompts in Kurzform (ohne Antworten) dokumentiert; die eingesetzten KI-Systeme sind im KI-Verzeichnis aufgeführt.
+
+{\small
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{@{}p{0.18\textwidth}p{0.78\textwidth}@{}}
+\textbf{Prompt 1} &
+Welche Literatur gibt es zu Analyse von Order-to-Cash mit Process Mining. Suche mir die relevantesten 10 heraus. (Fable 5)
+\\[1.2em]
+\textbf{Prompt 2} &
+Erstelle mir die Auswertung mithilfe einer Grafik für die kumulierten Variantenabdeckung vom O2C-Log mit PM4PY. (Fable 5)
+\\[1.2em]
+\textbf{Prompt 3} &
+Berechne realistisch die Auswirkungen durch die identifizierten Gaps. (Fable 5)
+\\[1.2em]
+\textbf{Prompt 4} &
+Welche Schwachstellen existieren derzeit bei O2C Prozessen? (Opus 4.8)
+\\[1.2em]
+\textbf{Prompt 5} &
+Erstelle mir realistische aber fiktive Daten, die ich für die Analyse nutzen kann. (Opus 4.8)
+\\[1.2em]
+\textbf{Prompt 6} &
+Schreibe die komplette Projektarbeit auf Basis der Vorlesungsunterlagen und der vorgegebenen Struktur und arbeite alles aus. (Opus 4.8)
+\\[1.2em]
+\textbf{Prompt 7} &
+Wir müssen beide 4000 Wörter schreiben, also müssen wir auf insgesamt 8000 Wörter kommen. Erweitere die Hausarbeit entsprechend. (Opus 4.8)
+\\[1.2em]
+\textbf{Prompt 8} &
+Da wir jetzt bei einem anderen Prof schreiben, müssen wir die Struktur und den Inhalt basierend auf Leitfaden und Aufgabenstellung ändern. (Fable 5)
+\\[1.2em]
+\end{longtable}}

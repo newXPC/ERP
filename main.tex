@@ -69,22 +69,18 @@
 \input{chapters/sec_03}
 \input{chapters/sec_04}
 \input{chapters/sec_05}
-\input{chapters/sec_06}
-\input{chapters/sec_07}
-\input{chapters/sec_08}
 
-% ── Nachspann ─────────────────────────────────────────────────
-\clearpage
-\input{anhang}
-
+% ── Nachspann: Literatur → KI-Verzeichnis → Anhang ───────────
 \clearpage
 \printbibliography[
     heading=bibintoc,
     title={Literatur}
 ]
 
-% Promptverzeichnis
-\input{config/promptverzeichnis}
+% KI-Verzeichnis (folgt gemäß Leitfaden dem Literaturverzeichnis)
+\input{config/kiverzeichnis}
+
 \clearpage
+\input{anhang}
 
 \end{document}

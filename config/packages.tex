@@ -175,17 +175,19 @@
 % ============================================================
 %  LITERATURVERZEICHNIS – BibLaTeX (APA), FOM-Leitfaden
 % ============================================================
+% Zitation per Fußnote (Vorgabe des Dozenten, vgl. ITM-Leitfaden Abschn. 6.2.1):
+% im Text \footcite[Vgl.][S.~x]{key} verwenden; direkte Zitate ohne "Vgl.".
 \usepackage[
   backend=biber,
-  style=apa,
-  autocite=inline,
+  style=authoryear,
+  autocite=footnote,
   maxcitenames=2,
   maxbibnames=20,
   giveninits=false,
   uniquename=false,
   uniquelist=false,
   dashed=false,
-  sorting=anyt,
+  sorting=nyt,
   urldate=long,
   dateabbrev=false,
 ]{biblatex}
