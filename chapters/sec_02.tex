@@ -66,15 +66,15 @@ Zusammengefasst liefert die Datenperspektive bereits einen ersten Hinweis auf di
 
 Die Bewegungsdaten liegen in relationalen Tabellenpaaren aus Kopf- und Positionsdaten (Tabelle~\ref{tab:zentrale-sap-tabellen}). Drei Eigenschaften sind für die vorliegende Fragestellung entscheidend. Erstens trägt jeder Beleg Zeitstempel und Benutzerkennung (z.\,B. \gls{erdat}/\gls{erzet}/\gls{ernam}), sodass Ereigniszeitpunkte rekonstruierbar sind. Zweitens dokumentiert die Belegflusstabelle \gls{vbfa} jede Vorgänger-Nachfolger-Beziehung zwischen Belegen und verknüpft damit die Prozessschritte eines Falls. Drittens protokollieren Änderungsbelege (\gls{cdhdr}/\gls{cdpos}) jede nachträgliche Änderung an Belegen und Stammdaten einschließlich Datum, Uhrzeit, Benutzer und geändertem Feld. Über sie werden auch das Setzen und Lösen von Kredit-, Liefer- und Fakturasperren sichtbar\footcites(Vgl.)()[S.~63 ff.]{scheibler2021vertrieb}[Abschnitt~2.1 und 3.1, S.~9--18]{sap2022samplecontent}. Besonders die Änderungsbelege sind für die vorliegende Fragestellung wertvoll, weil sie Zustandsübergänge festhalten, die in den reinen Belegtabellen unsichtbar blieben. Ob und wann eine Kreditsperre gesetzt und wieder gelöst wurde, ergibt sich erst aus der Historie des Feldes \gls{cmgst} in \gls{cdpos}. Ohne diese Protokollierung wären die Sperrenmuster K2, K3 und K5 aus den Daten nicht rekonstruierbar. Sie sind der Grund, warum ein Event-Log deutlich mehr Aktivitäten enthalten kann als der reine Belegfluss nahelegt. Abbildung~\ref{fig:belegfluss-s4hana} zeigt diese Belegkette in der Systemanzeige. Vom Angebot über den Terminauftrag, die Auslieferung mit Kommissionierung und Warenausgang bis zu Rechnung und ausgeziffertem Buchungsbeleg ist jeder Schritt mit Datum, Uhrzeit und Status protokolliert, also genau die Information, aus der das Event-Log seine Ereignisse bezieht. Abbildung~\ref{fig:vbak-se16n} zeigt ergänzend die zugrunde liegende Kopftabelle \gls{vbak} in der Datenanzeige. Neben den Anlege-Zeitstempeln \gls{erdat} und \gls{erzet} ist dort auch das Sperrfeld \gls{lifsk} sichtbar, aus dem die Analyse die Liefersperren rekonstruiert.
 
-\begin{figure}[!htb]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image8.png}
+\includegraphics[width=\textwidth,height=0.32\textheight,keepaspectratio]{figures/image8.png}
 \caption[Belegfluss eines Kundenauftrags in SAP S/4HANA]{Belegfluss eines Kundenauftrags in \gls{sap} \gls{s/4hana} (Screenshot aus dem Global-Bike-Schulungssystem der FOM)}\label{fig:belegfluss-s4hana}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{figures/image9.png}
+\includegraphics[width=\textwidth,height=0.32\textheight,keepaspectratio]{figures/image9.png}
 \caption[Auftragskopftabelle VBAK in der Datenanzeige]{Auftragskopftabelle \gls{vbak} in der Datenanzeige (SE16N) mit den Feldern \gls{erdat}, \gls{erzet} und \gls{lifsk} (Screenshot aus dem Global-Bike-Schulungssystem der FOM, Benutzerkennungen anonymisiert)}\label{fig:vbak-se16n}
 \end{figure}
 
